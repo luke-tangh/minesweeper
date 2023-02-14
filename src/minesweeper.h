@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <vector>
+#include <map>
 
 
 using namespace std;
@@ -11,9 +12,10 @@ bool valid_pos(int x, int y);
 
 // base class for user_map and sys_map
 class Grind {
+private:
+	vector<vector<char>> user_map;
+	vector<vector<char>> sys_map;
 public:
-	vector<vector<char>> sys_map, user_map;
-
 	void init_game();
 	void init_sys_map();
 	void init_user_map();
@@ -22,6 +24,7 @@ public:
 	bool check_win();
 	void print_map(int idx);
 	bool is_mine(int x, int y);
-	void rev_dfs(int x, int y);
-	bool rev_pos(int x, int y);
+	bool flag_mine(int x, int y);
+	map<vector<int>, char> rev_dfs(map<vector<int>, char> &positions, int x, int y);
+	map<vector<int>, char> rev_pos(int x, int y);
 };

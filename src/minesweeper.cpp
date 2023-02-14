@@ -1,4 +1,5 @@
-﻿#include <iostream>
+﻿#include <map>
+#include <iostream>
 #include <cstdlib>
 #include <iomanip>
 #include <vector>
@@ -39,10 +40,11 @@ void Grind::init_game() {
 
 // initial system map
 void Grind::init_sys_map() {
+    sys_map.clear();
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
         vector<char> col;
         for (int j = 0; j < GRIND_WIDTH; ++j) {
-            col.push_back(EMPTY);
+            col.push_back(BLANK);
         }
         sys_map.push_back(col);
     }
@@ -51,6 +53,7 @@ void Grind::init_sys_map() {
 
 // initial user map
 void Grind::init_user_map() {
+    user_map.clear();
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
         vector<char> col;
         for (int j = 0; j < GRIND_WIDTH; ++j) {
@@ -136,7 +139,7 @@ bool Grind::check_win() {
 void Grind::upd_user_map() {
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
         for (int j = 0; j < GRIND_WIDTH; ++j) {
-            if (sys_map[i][j] != MINE && sys_map[i][j] != EMPTY) {
+            if (sys_map[i][j] != MINE && sys_map[i][j] != BLANK) {
                 user_map[i][j] = sys_map[i][j];
             }
         }
@@ -145,43 +148,60 @@ void Grind::upd_user_map() {
 
 
 // dfs algorithm
-void Grind::rev_dfs(int x, int y) {
-    if (!valid_pos(x, y) || sys_map[x][y] == BLANK) {
-        return;
+map<vector<int>, char> Grind::rev_dfs(map<vector<int>, char> &positions, int x, int y) {
+    if (!valid_pos(x, y) || sys_map[x][y] == EMPTY) {
+        return positions;
     }
     vector<vector<int>> v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
     int count = 0;
-    if (sys_map[x][y] == EMPTY) {
+    if (sys_map[x][y] == BLANK && user_map[x][y] != FLAG) {
         for (int i = 0; i < 8; i++) {
             if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] == MINE) {
                 count++;
             }
         }
         if (count > 0) {
-            sys_map[x][y] = '0' + count;
+            char digit = '0' + count;
+            sys_map[x][y] = digit;
+            positions[{x, y}] = digit;
         }
         else {
-            sys_map[x][y] = BLANK;
+            sys_map[x][y] = EMPTY;
+            positions[{x, y}] = EMPTY;
             for (int i = 0; i < 8; i++) {
-                rev_dfs(x + v[i][0], y + v[i][1]);
+                rev_dfs(positions, x + v[i][0], y + v[i][1]);
             }
         }
     }
+    return positions;
 }
 
 
 // unreveal a position
-bool Grind::rev_pos(int x, int y) {
+map<vector<int>, char> Grind::rev_pos(int x, int y) {
+    map<vector<int>, char> positions;
     if (not valid_pos(x, y)) {
-        cout << "invalid position!" << endl;
-        return false;
+        return positions;
     }
     if (is_mine(x, y)) {
         user_map[x][y] = REV_MINE;
-        cout << "hit mine!" << endl;
+        positions[{x, y}] = REV_MINE;
+        return positions;
+    }
+    positions = rev_dfs(positions, x, y);
+    upd_user_map();
+    return positions;
+}
+
+
+// true: set flag | false: cancel flag
+bool Grind::flag_mine(int x, int y) {
+    if (user_map[x][y] == FLAG) {
+        user_map[x][y] = sys_map[x][y];
         return false;
     }
-    rev_dfs(x, y);
-    upd_user_map();
-    return true;
+    else {
+        user_map[x][y] = FLAG;
+        return true;
+    }
 }

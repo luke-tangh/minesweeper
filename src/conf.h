@@ -1,17 +1,24 @@
 #pragma once
 
 /* map settings chars */
-const int GRIND_HEIGHT = 10;  //16
-const int GRIND_WIDTH = 10;  //30;
-const int MAX_MINES = 10;  //99;
+const int GRIND_HEIGHT = 16;  // 16
+const int GRIND_WIDTH = 30;  // 30
+const int MAX_MINES = 99;  // 99
 
 /* system map chars */
 const char MINE = 'M';
 const char REV_MINE = 'X';
-// `E`: unrevealed position
-const char EMPTY = 'E';
-// `B`: no adjacent mines
-const char BLANK = 'B';
+const char BLANK = 'B';  // `B`: no adjacent mines
+const char EMPTY = 'E';  // `E`: unrevealed position
+const char FLAG = 'F';
 
 /* user map chars */
 const char UNREV_POS = '.';
+
+
+/* gui settings */
+const int GAP = 10;
+const int HEAD = 40;
+const int BLOCK = 16;  // 16 pixel per block
+const int MAP_WIDTH = GRIND_WIDTH * 16 + GAP * 2;
+const int MAP_HEIGHT = GRIND_HEIGHT * 16 + GAP + HEAD;
