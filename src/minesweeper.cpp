@@ -31,6 +31,7 @@ bool valid_pos(int x, int y) {
 
 void Grind::init_game() {
     click_count = 0;
+    game_over = false;
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
     srand(time(0));  // set random seed
     init_sys_map();
@@ -123,9 +124,13 @@ bool Grind::is_mine(int x, int y) {
 }
 
 
-// return true if win
-bool Grind::check_win() {
-    return click_count == BLOCKS - MAX_MINES;
+bool Grind::check_game_over() {
+    return game_over || click_count == BLOCKS - MAX_MINES;
+}
+
+
+char Grind::get_user_pos(int x, int y) {
+    return user_map[x][y];
 }
 
 
@@ -163,6 +168,7 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = REV_MINE;
             positions[{x, y}] = REV_MINE;
+            game_over = true;
         }
         return positions;
     }
@@ -189,6 +195,30 @@ bool Grind::flag_mine(int x, int y) {
 }
 
 
-char Grind::get_user_pos(int x, int y) {
-    return user_map[x][y];
+map<vector<int>, char> Grind::search_pos(int x, int y) {
+    positions.clear();
+    char flags = '0';
+    for (int i = 0; i < 8; i++) {
+        if (valid_pos(x + v[i][0], y + v[i][1])) {
+            if (user_map[x + v[i][0]][y + v[i][1]] == FLAG) {
+                flags++;
+            }
+            else {
+                positions[{x + v[i][0], y + v[i][1]}] = sys_map[x + v[i][0]][y + v[i][1]];
+            }
+        }
+    }
+    if (flags != sys_map[x][y]) {
+        positions.clear();
+    }
+    for (pair<vector<int>, char> kv : positions) {
+        if (is_mine(kv.first[0], kv.first[1])) {
+            positions[{kv.first[0], kv.first[1]}] = REV_MINE;
+            game_over = true;
+        }
+        if (sys_map[kv.first[0]][kv.first[1]] == BLANK) {
+            click_dfs(kv.first[0], kv.first[1]);
+        }
+    }
+    return positions;
 }

@@ -82,9 +82,10 @@ void Map::load_assets() {
 
 /*
 vector.empty() : exit
-vector[0] = 0 : restart
-vector[0] = 1 : click
-vector[0] = 2 : flag
+vector[0] = 0 : KEYBOARD 'R' -> restart
+vector[0] = 1 : LEFTCLICK -> click
+vector[0] = 2 : RIGHTCLICK -> flag
+vector[0] = 3 : MIDDLECLICK -> search
 */
 vector<int> Map::game_loop() {
 	ExMessage m;
@@ -95,6 +96,8 @@ vector<int> Map::game_loop() {
 			return { 1, m.x, m.y };
 		case WM_RBUTTONDOWN:
 			return { 2, m.x, m.y };
+		case WM_MBUTTONDOWN: 
+			return { 3, m.x, m.y };
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
 				return {};

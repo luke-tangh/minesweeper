@@ -9,13 +9,12 @@ using namespace std;
 
 
 bool valid_axis(int x, int y) {
-	return (x > GAP && x < GAP + GRIND_WIDTH * 16 &&
-			y > HEAD && y < GRIND_HEIGHT * 16 + HEAD);
+	return (x > GAP && x < GAP + GRIND_WIDTH * 16 && y > HEAD && y < GRIND_HEIGHT * 16 + HEAD);
 }
 
 
 void click_block(Grind* pG, Map* pM, int x, int y) {
-	if (valid_axis(x, y)) {
+	if (valid_axis(x, y) && !pG->check_game_over()) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
 		map<vector<int>, char> positions = pG->click_pos(x_idx, y_idx);
@@ -29,7 +28,7 @@ void click_block(Grind* pG, Map* pM, int x, int y) {
 
 
 void flag_block(Grind* pG, Map* pM, int x, int y) {
-	if (valid_axis(x, y)) {
+	if (valid_axis(x, y) && !pG->check_game_over()) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
 		char this_char = pG->get_user_pos(x_idx, y_idx);
@@ -44,6 +43,20 @@ void flag_block(Grind* pG, Map* pM, int x, int y) {
 		}
 		else {
 			pM->upd_block(x_pic, y_pic, UNREV);
+		}
+	}
+}
+
+
+void search_block(Grind* pG, Map* pM, int x, int y) {
+	if (valid_axis(x, y) && !pG->check_game_over()) {
+		int x_idx = (y - HEAD) / BLOCK;
+		int y_idx = (x - GAP) / BLOCK;
+		map<vector<int>, char> positions = pG->search_pos(x_idx, y_idx);
+		for (pair<vector<int>, char> kv : positions) {
+			int x_pic = kv.first[1] * BLOCK + GAP;
+			int y_pic = kv.first[0] * BLOCK + HEAD;
+			pM->upd_block(x_pic, y_pic, kv.second);
 		}
 	}
 }
@@ -80,8 +93,8 @@ int main() {
 		case 2:
 			flag_block(pGame, pMap, axis[1], axis[2]);
 			break;
-		}
-		if (pGame->check_win()) {
+		case 3:
+			search_block(pGame, pMap, axis[1], axis[2]);
 			break;
 		}
 		axis = pMap->game_loop();
