@@ -33,6 +33,10 @@ void flag_block(Grind* pG, Map* pM, int x, int y) {
 	if (valid_axis(x, y)) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
+		char this_char = pG->get_user_pos(x_idx, y_idx);
+		if (this_char != UNREV_POS && this_char != FLAG) {
+			return;
+		}
 		bool set_flag = pG->flag_mine(x_idx, y_idx);
 		int x_pic = y_idx * BLOCK + GAP;
 		int y_pic = x_idx * BLOCK + HEAD;
@@ -74,6 +78,7 @@ int main() {
 			break;
 		case 2:
 			flag_block(pGame, pMap, axis[1], axis[2]);
+			break;
 		}
 		axis = pMap->game_loop();
 	}

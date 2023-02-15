@@ -37,6 +37,8 @@ void Map::display_map() {
 	setlinestyle(PS_SOLID, 3);
 	line(MAP_WIDTH-2, 0, MAP_WIDTH-2, MAP_HEIGHT);
 	line(0, MAP_HEIGHT-2, MAP_WIDTH, MAP_HEIGHT-2);
+
+	putimage(FACE_X, FACE_Y, &face_smile);
 }
 
 
@@ -49,6 +51,11 @@ void Map::load_assets() {
 	loadimage(&mine_wrong, _T("./assets/mine_wrong.png"));
 	loadimage(&qmark, _T("./assets/qmark.png"));
 	loadimage(&qmark_click, _T("./assets/qmark_click.png"));
+	loadimage(&face_cool, _T("./assets/face_cool.png"));
+	loadimage(&face_dead, _T("./assets/face_dead.png"));
+	loadimage(&face_shock, _T("./assets/shock.png"));
+	loadimage(&face_smile, _T("./assets/face_smile.png"));
+	loadimage(&face_smile_press, _T("./assets/face_smile_press.png"));
 	loadimage(&num_1, _T("./assets/num_1.png"));
 	loadimage(&num_2, _T("./assets/num_2.png"));
 	loadimage(&num_3, _T("./assets/num_3.png"));
@@ -57,6 +64,18 @@ void Map::load_assets() {
 	loadimage(&num_6, _T("./assets/num_6.png"));
 	loadimage(&num_7, _T("./assets/num_7.png"));
 	loadimage(&num_8, _T("./assets/num_8.png"));
+	loadimage(&digit_0, _T("./assets/digit_0.png"));
+	loadimage(&digit_1, _T("./assets/digit_1.png"));
+	loadimage(&digit_2, _T("./assets/digit_2.png"));
+	loadimage(&digit_3, _T("./assets/digit_3.png"));
+	loadimage(&digit_4, _T("./assets/digit_4.png"));
+	loadimage(&digit_5, _T("./assets/digit_5.png"));
+	loadimage(&digit_6, _T("./assets/digit_6.png"));
+	loadimage(&digit_7, _T("./assets/digit_7.png"));
+	loadimage(&digit_8, _T("./assets/digit_8.png"));
+	loadimage(&digit_9, _T("./assets/digit_9.png"));
+	loadimage(&digit_null, _T("./assets/digit_null.png"));
+	loadimage(&digit_empty, _T("./assets/digit_empty.png"));
 }
 
 

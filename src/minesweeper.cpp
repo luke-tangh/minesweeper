@@ -180,12 +180,14 @@ map<vector<int>, char> Grind::rev_dfs(map<vector<int>, char> &positions, int x, 
 // unreveal a position
 map<vector<int>, char> Grind::rev_pos(int x, int y) {
     map<vector<int>, char> positions;
-    if (not valid_pos(x, y)) {
+    if (!valid_pos(x, y)) {
         return positions;
     }
     if (is_mine(x, y)) {
-        user_map[x][y] = REV_MINE;
-        positions[{x, y}] = REV_MINE;
+        if (user_map[x][y] != FLAG) {
+            user_map[x][y] = REV_MINE;
+            positions[{x, y}] = REV_MINE;
+        }
         return positions;
     }
     positions = rev_dfs(positions, x, y);
@@ -197,11 +199,16 @@ map<vector<int>, char> Grind::rev_pos(int x, int y) {
 // true: set flag | false: cancel flag
 bool Grind::flag_mine(int x, int y) {
     if (user_map[x][y] == FLAG) {
-        user_map[x][y] = sys_map[x][y];
+        user_map[x][y] = UNREV_POS;
         return false;
     }
     else {
         user_map[x][y] = FLAG;
         return true;
     }
+}
+
+
+char Grind::get_user_pos(int x, int y) {
+    return user_map[x][y];
 }
