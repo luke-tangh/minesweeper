@@ -8,8 +8,8 @@ using namespace std;
 
 class Map {
 private:
+	IMAGE unrev;
 	IMAGE blank;
-	IMAGE empty;
 	IMAGE flag;
 	IMAGE mine;
 	IMAGE mine_click, mine_wrong;

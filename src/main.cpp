@@ -1,10 +1,9 @@
 #include <unordered_map>
 #include <iostream>
 #include <vector>
-#include "gui.h"
-#include "conf.h"
 #include "minesweeper.h"
-
+#include "conf.h"
+#include "gui.h"
 
 using namespace std;
 
@@ -19,7 +18,7 @@ void click_block(Grind* pG, Map* pM, int x, int y) {
 	if (valid_axis(x, y)) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		map<vector<int>, char> positions = pG->rev_pos(x_idx, y_idx);
+		map<vector<int>, char> positions = pG->click_pos(x_idx, y_idx);
 		for (pair<vector<int>, char> kv : positions) {
 			int x_pic = kv.first[1] * BLOCK + GAP;
 			int y_pic = kv.first[0] * BLOCK + HEAD;
@@ -34,7 +33,7 @@ void flag_block(Grind* pG, Map* pM, int x, int y) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
 		char this_char = pG->get_user_pos(x_idx, y_idx);
-		if (this_char != UNREV_POS && this_char != FLAG) {
+		if (this_char != UNREV && this_char != FLAG) {
 			return;
 		}
 		bool set_flag = pG->flag_mine(x_idx, y_idx);
@@ -44,7 +43,7 @@ void flag_block(Grind* pG, Map* pM, int x, int y) {
 			pM->upd_block(x_pic, y_pic, FLAG);
 		}
 		else {
-			pM->upd_block(x_pic, y_pic, BLANK);
+			pM->upd_block(x_pic, y_pic, UNREV);
 		}
 	}
 }
@@ -66,6 +65,8 @@ int main() {
 	pMap->display_map();
 	pMap->init_map();
 
+	pGame->print_map(0);
+
 	vector<int> axis = pMap->game_loop();
 
 	while (!axis.empty()) {
@@ -80,8 +81,13 @@ int main() {
 			flag_block(pGame, pMap, axis[1], axis[2]);
 			break;
 		}
+		if (pGame->check_win()) {
+			break;
+		}
 		axis = pMap->game_loop();
 	}
+
+	pGame->print_map(1);
 
 	pMap->exit_gui();
 

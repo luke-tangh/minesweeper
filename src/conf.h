@@ -3,17 +3,17 @@
 /* map settings chars */
 const int GRIND_HEIGHT = 16;  // 16
 const int GRIND_WIDTH = 30;  // 30
-const int MAX_MINES = 50;  // 99
+const int MAX_MINES = 99;  // 99
+const int BLOCKS = GRIND_HEIGHT * GRIND_WIDTH;
 
 /* system map chars */
 const char MINE = 'M';
 const char REV_MINE = 'X';
-const char BLANK = 'B';  // `B`: no adjacent mines
-const char EMPTY = 'E';  // `E`: unrevealed position
+const char BLANK = '0';  // `0`: no adjacent mines
 const char FLAG = 'F';
 
 /* user map chars */
-const char UNREV_POS = '.';
+const char UNREV = '.';
 
 
 /* gui settings */

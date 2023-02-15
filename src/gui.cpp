@@ -1,7 +1,7 @@
 #include <graphics.h>
 #include <iostream>
-#include <vector>
 #include <conio.h>
+#include <vector>
 #include "minesweeper.h"
 #include "conf.h"
 #include "gui.h"
@@ -21,7 +21,7 @@ void Map::init_gui() {
 void Map::init_map() {
 	for (int i = GAP; i < GRIND_WIDTH * 16 + GAP; i += 16) {
 		for (int j = HEAD; j < GRIND_HEIGHT * 16 + HEAD; j += 16) {
-			putimage(i, j, &blank);
+			putimage(i, j, &unrev);
 		}
 	}
 }
@@ -43,8 +43,8 @@ void Map::display_map() {
 
 
 void Map::load_assets() {
+	loadimage(&unrev, _T("./assets/unrev.png"));
 	loadimage(&blank, _T("./assets/blank.png"));
-	loadimage(&empty, _T("./assets/empty.png"));
 	loadimage(&flag, _T("./assets/flag.png"));
 	loadimage(&mine, _T("./assets/mine.png"));
 	loadimage(&mine_click, _T("./assets/mine_click.png"));
@@ -79,6 +79,13 @@ void Map::load_assets() {
 }
 
 
+
+/*
+vector.empty() : exit
+vector[0] = 0 : restart
+vector[0] = 1 : click
+vector[0] = 2 : flag
+*/
 vector<int> Map::game_loop() {
 	ExMessage m;
 	while (true) {
@@ -90,7 +97,7 @@ vector<int> Map::game_loop() {
 			return { 2, m.x, m.y };
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
-				return {0};
+				return {};
 			if (m.vkcode == 0x52)
 				return {0};
 		}
@@ -100,11 +107,11 @@ vector<int> Map::game_loop() {
 
 void Map::upd_block(int x, int y, char sym) {
 	switch (sym) {
-	case 'B': putimage(x, y, &blank); break;
-	case 'E': putimage(x, y, &empty); break;
-	case 'M': putimage(x, y, &mine); break;
-	case 'F': putimage(x, y, &flag); break;
-	case 'X': putimage(x, y, &mine_click); break;
+	case UNREV: putimage(x, y, &unrev); break;
+	case BLANK: putimage(x, y, &blank); break;
+	case MINE: putimage(x, y, &mine); break;
+	case FLAG: putimage(x, y, &flag); break;
+	case REV_MINE: putimage(x, y, &mine_click); break;
 	case '1': putimage(x, y, &num_1); break;
 	case '2': putimage(x, y, &num_2); break;
 	case '3': putimage(x, y, &num_3); break;

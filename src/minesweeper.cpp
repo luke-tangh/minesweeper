@@ -1,11 +1,11 @@
-﻿#include <map>
-#include <iostream>
+﻿#include <iostream>
 #include <cstdlib>
 #include <iomanip>
 #include <vector>
 #include <ctime>
-#include "conf.h"
+#include <map>
 #include "minesweeper.h"
+#include "conf.h"
 
 
 using namespace std;
@@ -30,8 +30,9 @@ bool valid_pos(int x, int y) {
 
 
 void Grind::init_game() {
-    // set random seed
-    srand(time(0));
+    click_count = 0;
+    v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
+    srand(time(0));  // set random seed
     init_sys_map();
     init_user_map();
     gen_mines();
@@ -57,7 +58,7 @@ void Grind::init_user_map() {
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
         vector<char> col;
         for (int j = 0; j < GRIND_WIDTH; ++j) {
-            col.push_back(UNREV_POS);
+            col.push_back(UNREV);
         }
         user_map.push_back(col);
     }
@@ -107,79 +108,54 @@ void Grind::gen_mines() {
             y = gen_rand(GRIND_WIDTH);
         }
         sys_map[x][y] = MINE;
+        for (int i = 0; i < 8; i++) {
+            if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] != MINE) {
+                sys_map[x + v[i][0]][y + v[i][1]]++;
+            }
+        }
     }
 }
 
 
 // return true if mine hit
 bool Grind::is_mine(int x, int y) {
-    if (sys_map[x][y] == MINE) {
-        return true;
-    }
-    else {
-        return false;
-    }
+    return sys_map[x][y] == MINE;
 }
 
 
 // return true if win
 bool Grind::check_win() {
-    for (int i = 0; i < GRIND_HEIGHT; ++i) {
-        for (int j = 0; j < GRIND_WIDTH; ++j) {
-            if (sys_map[i][j] != user_map[i][j]) {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-
-// update user map
-void Grind::upd_user_map() {
-    for (int i = 0; i < GRIND_HEIGHT; ++i) {
-        for (int j = 0; j < GRIND_WIDTH; ++j) {
-            if (sys_map[i][j] != MINE && sys_map[i][j] != BLANK) {
-                user_map[i][j] = sys_map[i][j];
-            }
-        }
-    }
+    return click_count == BLOCKS - MAX_MINES;
 }
 
 
 // dfs algorithm
-map<vector<int>, char> Grind::rev_dfs(map<vector<int>, char> &positions, int x, int y) {
-    if (!valid_pos(x, y) || sys_map[x][y] == EMPTY) {
-        return positions;
+void Grind::click_dfs(int x, int y) {
+    if (!valid_pos(x, y) || user_map[x][y] != UNREV) {
+        return;
     }
-    vector<vector<int>> v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
-    int count = 0;
-    if (sys_map[x][y] == BLANK && user_map[x][y] != FLAG) {
-        for (int i = 0; i < 8; i++) {
-            if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] == MINE) {
-                count++;
-            }
-        }
-        if (count > 0) {
-            char digit = '0' + count;
-            sys_map[x][y] = digit;
-            positions[{x, y}] = digit;
+    if (user_map[x][y] != FLAG) {
+        char nearby_mines = sys_map[x][y];
+        if (nearby_mines > '0') {
+            user_map[x][y] = nearby_mines;
+            positions[{x, y}] = nearby_mines;
         }
         else {
-            sys_map[x][y] = EMPTY;
-            positions[{x, y}] = EMPTY;
+            positions[{x, y}] = BLANK;
+            user_map[x][y] = BLANK;
             for (int i = 0; i < 8; i++) {
-                rev_dfs(positions, x + v[i][0], y + v[i][1]);
+                click_dfs(x + v[i][0], y + v[i][1]);
             }
         }
+        click_count++;
     }
-    return positions;
+    return;
 }
 
 
-// unreveal a position
-map<vector<int>, char> Grind::rev_pos(int x, int y) {
-    map<vector<int>, char> positions;
+// click a position
+map<vector<int>, char> Grind::click_pos(int x, int y) {
+    positions.clear();
     if (!valid_pos(x, y)) {
         return positions;
     }
@@ -190,8 +166,12 @@ map<vector<int>, char> Grind::rev_pos(int x, int y) {
         }
         return positions;
     }
-    positions = rev_dfs(positions, x, y);
-    upd_user_map();
+    click_dfs(x, y);
+    for (int i = 0; i < 8; i++) {
+        if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] == BLANK) {
+            click_dfs(x + v[i][0], y + v[i][1]);
+        }
+    }
     return positions;
 }
 
@@ -199,7 +179,7 @@ map<vector<int>, char> Grind::rev_pos(int x, int y) {
 // true: set flag | false: cancel flag
 bool Grind::flag_mine(int x, int y) {
     if (user_map[x][y] == FLAG) {
-        user_map[x][y] = UNREV_POS;
+        user_map[x][y] = UNREV;
         return false;
     }
     else {
