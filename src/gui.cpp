@@ -10,6 +10,7 @@
 using namespace std;
 
 
+// initialise gui
 void Map::init_gui() {
 	initgraph(MAP_WIDTH, MAP_HEIGHT);
 	// set background grey and refresh screen
@@ -18,6 +19,7 @@ void Map::init_gui() {
 }
 
 
+// initialise map
 void Map::init_map() {
 	for (int i = GAP; i < GRIND_WIDTH * 16 + GAP; i += 16) {
 		for (int j = HEAD; j < GRIND_HEIGHT * 16 + HEAD; j += 16) {
@@ -27,6 +29,7 @@ void Map::init_map() {
 }
 
 
+// display map on screen
 void Map::display_map() {
 	setlinecolor(WHITE);
 	setlinestyle(PS_SOLID, 3);
@@ -39,6 +42,69 @@ void Map::display_map() {
 	line(0, MAP_HEIGHT-2, MAP_WIDTH, MAP_HEIGHT-2);
 
 	putimage(FACE_X, FACE_Y, &face_smile);
+}
+
+
+void Map::init_counters() {
+	for (int i = 0; i <= 2; i++) {
+		putimage(COUNTER_RX + DIGIT_WIDTH * i, COUNTER_RY, &digit_0);
+	}
+	set_lcounter(MAX_MINES);
+}
+
+
+// set mine counter
+void Map::set_lcounter(int mines) {
+	vector<int> digits;
+	if (mines > 999) mines = 999;
+	if (mines < 0) mines = 0;
+	while (mines) {
+		digits.push_back(mines % 10);
+		mines /= 10;
+	}
+	while (digits.size() < 3) {
+		digits.push_back(0);
+	}
+	reverse(digits.begin(), digits.end());
+	for (int i = 0; i <= 2; i++) {
+		set_digit(COUNTER_LX + DIGIT_WIDTH * i, COUNTER_RY, digits[i]);
+	}
+}
+
+
+// set time counter
+void Map::set_rcounter(int time) {
+	vector<int> digits;
+	if (time > 999) time = 999;
+	if (time < 0) time = 0;
+	while (time) {
+		digits.push_back(time % 10);
+		time /= 10;
+	}
+	while (digits.size() < 3) {
+		digits.push_back(0);
+	}
+	reverse(digits.begin(), digits.end());
+	for (int i = 0; i <= 2; i++) {
+		set_digit(COUNTER_RX + DIGIT_WIDTH * i, COUNTER_LY, digits[i]);
+	}
+}
+
+
+// set digit given axis
+void Map::set_digit(int x, int y, int digit) {
+	switch (digit) {
+	case 0: putimage(x, y, &digit_0); break;
+	case 1: putimage(x, y, &digit_1); break;
+	case 2: putimage(x, y, &digit_2); break;
+	case 3: putimage(x, y, &digit_3); break;
+	case 4: putimage(x, y, &digit_4); break;
+	case 5: putimage(x, y, &digit_5); break;
+	case 6: putimage(x, y, &digit_6); break;
+	case 7: putimage(x, y, &digit_7); break;
+	case 8: putimage(x, y, &digit_8); break;
+	case 9: putimage(x, y, &digit_9); break;
+	}
 }
 
 
@@ -79,7 +145,6 @@ void Map::load_assets() {
 }
 
 
-
 /*
 vector.empty() : exit
 vector[0] = 0 : KEYBOARD 'R' -> restart
@@ -101,13 +166,14 @@ vector<int> Map::game_loop() {
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
 				return {};
-			if (m.vkcode == 0x52)
+			if (m.vkcode == 0x52) // 'R'
 				return {0};
 		}
 	}
 }
 
 
+// update a block given axis
 void Map::upd_block(int x, int y, char sym) {
 	switch (sym) {
 	case UNREV: putimage(x, y, &unrev); break;
@@ -127,6 +193,7 @@ void Map::upd_block(int x, int y, char sym) {
 }
 
 
+// exit gui
 void Map::exit_gui() {
 	closegraph();
 }

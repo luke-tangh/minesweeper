@@ -195,6 +195,7 @@ bool Grind::flag_mine(int x, int y) {
 }
 
 
+// search a block (middle click)
 map<vector<int>, char> Grind::search_pos(int x, int y) {
     positions.clear();
     char flags = '0';

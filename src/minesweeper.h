@@ -18,7 +18,6 @@ private:
 	vector<vector<int>> v;
 	map<vector<int>, char> positions;
 	bool game_over;
-	int click_count;  // number of blocks clicked
 public:
 	void init_game();
 	void init_sys_map();

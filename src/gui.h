@@ -26,6 +26,10 @@ public:
 	void init_gui();
 	void init_map();
 	void display_map();
+	void init_counters();
+	void set_lcounter(int mines);
+	void set_rcounter(int time);
+	void set_digit(int x, int y, int digit);
 	void load_assets();
 	vector<int> game_loop();
 	void upd_block(int x, int y, char sym);
