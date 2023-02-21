@@ -112,9 +112,9 @@ void Map::load_assets() {
 	loadimage(&unrev, _T("./assets/unrev.png"));
 	loadimage(&blank, _T("./assets/blank.png"));
 	loadimage(&flag, _T("./assets/flag.png"));
+	loadimage(&flag_wrong, _T("./assets/flag_wrong.png"));
 	loadimage(&mine, _T("./assets/mine.png"));
 	loadimage(&mine_click, _T("./assets/mine_click.png"));
-	loadimage(&mine_wrong, _T("./assets/mine_wrong.png"));
 	loadimage(&qmark, _T("./assets/qmark.png"));
 	loadimage(&qmark_click, _T("./assets/qmark_click.png"));
 	loadimage(&face_cool, _T("./assets/face_cool.png"));
@@ -181,6 +181,7 @@ void Map::upd_block(int x, int y, char sym) {
 	case MINE: putimage(x, y, &mine); break;
 	case FLAG: putimage(x, y, &flag); break;
 	case REV_MINE: putimage(x, y, &mine_click); break;
+	case FLAG_WRONG: putimage(x, y , &flag_wrong); break;
 	case '1': putimage(x, y, &num_1); break;
 	case '2': putimage(x, y, &num_2); break;
 	case '3': putimage(x, y, &num_3); break;

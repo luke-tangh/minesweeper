@@ -10,9 +10,8 @@ class Map {
 private:
 	IMAGE unrev;
 	IMAGE blank;
-	IMAGE flag;
-	IMAGE mine;
-	IMAGE mine_click, mine_wrong;
+	IMAGE flag, flag_wrong;
+	IMAGE mine, mine_click;
 	IMAGE qmark, qmark_click;
 	IMAGE face_cool, face_dead, face_shock;
 	IMAGE face_smile, face_smile_press;

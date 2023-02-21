@@ -15,15 +15,13 @@ const int MAX_MINES = 99;  // 99
 const int BLOCKS = GRIND_HEIGHT * GRIND_WIDTH;
 
 
-/* system map chars */
+/* map chars */
 const char MINE = 'M';
 const char REV_MINE = 'X';
 const char BLANK = '0';  // `0`: no adjacent mines
 const char FLAG = 'F';
-
-
-/* user map chars */
 const char UNREV = '.';
+const char FLAG_WRONG = 'W';
 
 
 /* gui settings */

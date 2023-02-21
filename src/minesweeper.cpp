@@ -168,6 +168,14 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = REV_MINE;
             positions[{x, y}] = REV_MINE;
+            // check wrongly flagged position
+            for (int i = 0; i < sys_map.size(); ++i) {
+                for (int j = 0; j < sys_map[0].size(); ++j) {
+                    if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
+                        positions[{i, j}] = FLAG_WRONG;
+                    }
+                }
+            }
             game_over = true;
         }
         return positions;

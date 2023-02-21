@@ -90,8 +90,11 @@ void restart(Grind* pG, Map* pM) {
 
 
 // start timer if game starts
-void check_time() {
-	if (!game_start) {
+void check_time(Grind* pG) {
+	if (game_start && !pG->check_game_over()) {
+		game_start = false;
+	}
+	else if (!game_start && !pG->check_game_over()) {
 		game_start = true;
 		t_start = time(NULL);
 	}
@@ -99,7 +102,7 @@ void check_time() {
 
 
 // update time LCD
-void upd_time(Grind* pG, Map* pM) {
+void upd_time(Map* pM) {
 	while (!game_exit) {
 		t_end = time(NULL);
 		if (game_start) {
@@ -116,7 +119,7 @@ int main() {
 	
 	thread timer;
 	t_start = time(NULL);
-	timer = thread(upd_time, pGame, pMap);
+	timer = thread(upd_time, pMap);
 
 	pGame->init_game();
 	pMap->init_gui();
@@ -129,7 +132,7 @@ int main() {
 	vector<int> axis = pMap->game_loop();
 
 	while (!axis.empty()) {
-		check_time();
+		check_time(pGame);
 		switch (axis[0]) {
 		case 0:
 			restart(pGame, pMap);
