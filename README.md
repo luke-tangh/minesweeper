@@ -1,6 +1,6 @@
 # minesweeper
 ## Brief
-A C++ version of a classic game minesweeper.
+C++ version of a classic game minesweeper.
 
 ## Environment
 - `c++ 17`
