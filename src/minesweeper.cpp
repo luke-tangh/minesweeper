@@ -29,9 +29,9 @@ bool valid_pos(int x, int y) {
 }
 
 
+// initialise game variables
 void Grind::init_game() {
     click_count = 0;
-    game_over = false;
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
     srand(time(0));  // set random seed
     init_sys_map();
@@ -124,11 +124,13 @@ bool Grind::is_mine(int x, int y) {
 }
 
 
+// [!temp!] check is game is over
 bool Grind::check_game_over() {
     return game_over || click_count == BLOCKS - MAX_MINES;
 }
 
 
+// return symbol on usermap
 char Grind::get_user_pos(int x, int y) {
     return user_map[x][y];
 }
@@ -168,6 +170,8 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = REV_MINE;
             positions[{x, y}] = REV_MINE;
+            game_over = true;
+            refresh_timer = false;  // stop timer
             // check wrongly flagged position
             for (int i = 0; i < sys_map.size(); ++i) {
                 for (int j = 0; j < sys_map[0].size(); ++j) {
@@ -176,7 +180,6 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
                     }
                 }
             }
-            game_over = true;
         }
         return positions;
     }
@@ -224,6 +227,7 @@ map<vector<int>, char> Grind::search_pos(int x, int y) {
         if (is_mine(kv.first[0], kv.first[1])) {
             positions[{kv.first[0], kv.first[1]}] = REV_MINE;
             game_over = true;
+            refresh_timer = false;  // stop timer
         }
         if (sys_map[kv.first[0]][kv.first[1]] == BLANK) {
             click_dfs(kv.first[0], kv.first[1]);

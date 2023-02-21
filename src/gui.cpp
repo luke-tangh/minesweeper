@@ -108,6 +108,7 @@ void Map::set_digit(int x, int y, int digit) {
 }
 
 
+// load assets from folder
 void Map::load_assets() {
 	loadimage(&unrev, _T("./assets/unrev.png"));
 	loadimage(&blank, _T("./assets/blank.png"));
@@ -168,6 +169,28 @@ vector<int> Map::game_loop() {
 				return {};
 			if (m.vkcode == 0x52) // 'R'
 				return {0};
+		}
+	}
+}
+
+
+/*
+vector.empty() : exit
+vector[0] = 0 : KEYBOARD 'R' -> restart
+vector[0] = 1 : LEFTCLICK -> click
+*/
+vector<int> Map::wait_loop() {
+	ExMessage m;
+	while (true) {
+		m = getmessage(EX_MOUSE | EX_KEY);
+		switch (m.message) {
+		case WM_LBUTTONDOWN:
+			return { 1, m.x, m.y };
+		case WM_KEYDOWN:
+			if (m.vkcode == VK_ESCAPE)
+				return {};
+			if (m.vkcode == 0x52) // 'R'
+				return { 0 };
 		}
 	}
 }

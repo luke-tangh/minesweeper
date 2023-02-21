@@ -17,7 +17,6 @@ private:
 	vector<vector<char>> sys_map;
 	vector<vector<int>> v;
 	map<vector<int>, char> positions;
-	bool game_over;
 public:
 	void init_game();
 	void init_sys_map();

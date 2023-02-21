@@ -5,8 +5,10 @@ extern int click_count;  // number of blocks clicked
 extern int flag_count;
 extern int t_start;
 extern int t_end;
-extern bool game_start;
+extern bool game_over;
 extern bool game_exit;  // `esc` is pressed
+extern bool refresh_timer;
+
 
 /* map settings chars */
 const int GRIND_HEIGHT = 16;  // 16
@@ -27,6 +29,7 @@ const char FLAG_WRONG = 'W';
 /* gui settings */
 const int GAP = 10;
 const int HEAD = 50;
+const int FACE = 24;
 const int BLOCK = 16;  // 16 pixel per block
 const int MAP_WIDTH = GRIND_WIDTH * 16 + GAP * 2;
 const int MAP_HEIGHT = GRIND_HEIGHT * 16 + GAP + HEAD;

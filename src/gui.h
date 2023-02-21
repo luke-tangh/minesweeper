@@ -31,6 +31,7 @@ public:
 	void set_digit(int x, int y, int digit);
 	void load_assets();
 	vector<int> game_loop();
+	vector<int> wait_loop();
 	void upd_block(int x, int y, char sym);
 	void exit_gui();
 };
