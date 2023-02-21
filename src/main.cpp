@@ -132,7 +132,7 @@ int main() {
 	pMap->display_map();
 	pMap->init_counters();
 	pMap->init_map();
-	pGame->print_map(0);
+	// pGame->print_map(0);
 
 	vector<int> axis = pMap->game_loop();
 
@@ -159,6 +159,12 @@ int main() {
 				search_block(pGame, pMap, axis[1], axis[2]);
 				break;
 			}
+			if (game_over) pMap->set_face_dead();
+			if (pGame->check_win()) {
+				game_over = true;
+				refresh_timer = false;
+				pMap->set_face_cool();
+			}
 			axis = pMap->game_loop();
 		}
 		// wait loop
@@ -178,7 +184,8 @@ int main() {
 
 	game_exit = true;
 	timer.join();
-	pGame->print_map(1);
+	// pGame->print_map(1);
+	// cout << click_count << endl;
 	pMap->exit_gui();
 
 	return 0;

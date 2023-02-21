@@ -17,12 +17,14 @@ private:
 	vector<vector<char>> sys_map;
 	vector<vector<int>> v;
 	map<vector<int>, char> positions;
+	// bool first_click;
 public:
 	void init_game();
+	void init_maps();
 	void init_sys_map();
 	void init_user_map();
 	void gen_mines();
-	bool check_game_over();
+	bool check_win();
 	char get_user_pos(int x, int y);
 	void print_map(int idx);
 	bool is_mine(int x, int y);

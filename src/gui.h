@@ -29,6 +29,9 @@ public:
 	void set_lcounter(int mines);
 	void set_rcounter(int time);
 	void set_digit(int x, int y, int digit);
+	void set_face_smile();
+	void set_face_dead();
+	void set_face_cool();
 	void load_assets();
 	vector<int> game_loop();
 	vector<int> wait_loop();

@@ -26,6 +26,7 @@ void Map::init_map() {
 			putimage(i, j, &unrev);
 		}
 	}
+	set_face_smile();
 }
 
 
@@ -105,6 +106,21 @@ void Map::set_digit(int x, int y, int digit) {
 	case 8: putimage(x, y, &digit_8); break;
 	case 9: putimage(x, y, &digit_9); break;
 	}
+}
+
+
+void Map::set_face_smile() {
+	putimage(FACE_X, FACE_Y, &face_smile);
+}
+
+
+void Map::set_face_dead() {
+	putimage(FACE_X, FACE_Y, &face_dead);
+}
+
+
+void Map::set_face_cool() {
+	putimage(FACE_X, FACE_Y, &face_cool);
 }
 
 

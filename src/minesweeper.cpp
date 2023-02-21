@@ -31,16 +31,23 @@ bool valid_pos(int x, int y) {
 
 // initialise game variables
 void Grind::init_game() {
+    // first_click = true;
     click_count = 0;
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
+    init_maps();
+};
+
+
+// initialise maps
+void Grind::init_maps() {
     srand(time(0));  // set random seed
     init_sys_map();
     init_user_map();
     gen_mines();
-};
+}
 
 
-// initial system map
+// initialise system map
 void Grind::init_sys_map() {
     sys_map.clear();
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
@@ -53,7 +60,7 @@ void Grind::init_sys_map() {
 }
 
 
-// initial user map
+// initialise user map
 void Grind::init_user_map() {
     user_map.clear();
     for (int i = 0; i < GRIND_HEIGHT; ++i) {
@@ -124,9 +131,9 @@ bool Grind::is_mine(int x, int y) {
 }
 
 
-// [!temp!] check is game is over
-bool Grind::check_game_over() {
-    return game_over || click_count == BLOCKS - MAX_MINES;
+// check if the player wins
+bool Grind::check_win() {
+    return click_count == BLOCKS - MAX_MINES;
 }
 
 
@@ -166,6 +173,10 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
     if (!valid_pos(x, y)) {
         return positions;
     }
+    // while (first_click && sys_map[x][y] != BLANK) {
+    //     init_maps();
+    // }
+    // first_click = false;
     if (is_mine(x, y)) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = REV_MINE;
@@ -226,10 +237,18 @@ map<vector<int>, char> Grind::search_pos(int x, int y) {
     for (pair<vector<int>, char> kv : positions) {
         if (is_mine(kv.first[0], kv.first[1])) {
             positions[{kv.first[0], kv.first[1]}] = REV_MINE;
+            // check wrongly flagged position
+            for (int i = 0; i < sys_map.size(); ++i) {
+                for (int j = 0; j < sys_map[0].size(); ++j) {
+                    if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
+                        positions[{i, j}] = FLAG_WRONG;
+                    }
+                }
+            }
             game_over = true;
             refresh_timer = false;  // stop timer
         }
-        if (sys_map[kv.first[0]][kv.first[1]] == BLANK) {
+        else {
             click_dfs(kv.first[0], kv.first[1]);
         }
     }
