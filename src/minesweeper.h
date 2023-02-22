@@ -14,6 +14,7 @@ private:
 	std::vector<std::vector<char>> sys_map;
 	std::vector<std::vector<int>> v;
 	std::map<std::vector<int>, char> positions;
+	int click_count;
 	// bool first_click;
 public:
 	void init_game();

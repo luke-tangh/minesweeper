@@ -11,13 +11,17 @@
 using namespace std;
 
 
-int click_count = 0;
-int flag_count = 0;
-int t_start = 0;
-int t_end = 0;
+/* global variables */
 bool game_over = false;
-bool game_exit = false;
 bool refresh_timer = false;
+
+
+static unique_ptr<Map> pM(new Map);
+static unique_ptr<Grind> pG(new Grind);
+static bool game_exit = false;  // `esc` is pressed
+static int flag_count = 0;
+static int t_start = 0;
+static int t_end = 0;
 
 
 // if axis lands in the grind
@@ -27,7 +31,7 @@ bool valid_axis(int x, int y) {
 
 
 // left click a block
-void click_block(Grind* pG, Map* pM, int x, int y) {
+void click_block(int x, int y) {
 	if (valid_axis(x, y)) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
@@ -42,7 +46,7 @@ void click_block(Grind* pG, Map* pM, int x, int y) {
 
 
 // right click a block
-void flag_block(Grind* pG, Map* pM, int x, int y) {
+void flag_block(int x, int y) {
 	if (valid_axis(x, y) && !game_over) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
@@ -67,7 +71,7 @@ void flag_block(Grind* pG, Map* pM, int x, int y) {
 
 
 // middle click a block
-void search_block(Grind* pG, Map* pM, int x, int y) {
+void search_block(int x, int y) {
 	if (valid_axis(x, y) && !game_over) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
@@ -88,7 +92,7 @@ bool click_restart(int x, int y) {
 
 
 // restart game
-void restart(Grind* pG, Map* pM) {
+void restart() {
 	game_over = false;
 	refresh_timer = false;
 	pG->init_game();
@@ -107,7 +111,7 @@ void check_timer() {
 
 
 // update time LCD
-void upd_time(Map* pM) {
+void upd_time() {
 	while (!game_exit) {
 		t_end = time(NULL);
 		if (refresh_timer) {
@@ -119,66 +123,63 @@ void upd_time(Map* pM) {
 
 
 int main() {
-	Map* pMap = new Map;
-	Grind* pGame = new Grind;
-	
 	thread timer;
 	t_start = time(NULL);
-	timer = thread(upd_time, pMap);
+	timer = thread(upd_time);
 
-	pGame->init_game();
-	pMap->init_gui();
-	pMap->load_assets();
-	pMap->display_map();
-	pMap->init_counters();
-	pMap->init_map();
+	pG->init_game();
+	pM->init_gui();
+	pM->load_assets();
+	pM->display_map();
+	pM->init_counters();
+	pM->init_map();
 	// pGame->print_map(0);
 
-	vector<int> axis = pMap->game_loop();
+	vector<int> axis = pM->game_loop();
 
 	while (!axis.empty()) {
 		// game loop
 		while (!axis.empty() && !game_over) {
 			switch (axis[0]) {
 			case 0:
-				restart(pGame, pMap);
+				restart();
 				break;
 			case 1:
 				check_timer();
-				click_block(pGame, pMap, axis[1], axis[2]);
+				click_block(axis[1], axis[2]);
 				if (click_restart(axis[1], axis[2])) {
-					restart(pGame, pMap);
+					restart();
 				}
 				break;
 			case 2:
 				check_timer();
-				flag_block(pGame, pMap, axis[1], axis[2]);
+				flag_block(axis[1], axis[2]);
 				break;
 			case 3:
 				check_timer();
-				search_block(pGame, pMap, axis[1], axis[2]);
+				search_block(axis[1], axis[2]);
 				break;
 			}
-			if (game_over) pMap->set_face_dead();
-			if (pGame->check_win()) {
+			if (game_over) pM->set_face_dead();
+			if (pG->check_win()) {
 				game_over = true;
 				refresh_timer = false;
-				pMap->set_face_cool();
+				pM->set_face_cool();
 			}
-			axis = pMap->game_loop();
+			axis = pM->game_loop();
 		}
 		// wait loop
 		if (!axis.empty()) {
 			switch (axis[0]) {
 			case 0:
-				restart(pGame, pMap);
+				restart();
 				break;
 			case 1:
 				if (click_restart(axis[1], axis[2])) {
-					restart(pGame, pMap);
+					restart();
 				}
 			}
-			axis = pMap->wait_loop();
+			axis = pM->wait_loop();
 		}
 	}
 
@@ -186,7 +187,7 @@ int main() {
 	timer.join();
 	// pGame->print_map(1);
 	// cout << click_count << endl;
-	pMap->exit_gui();
+	pM->exit_gui();
 
 	return 0;
 }
