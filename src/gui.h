@@ -3,9 +3,6 @@
 #include <vector>
 
 
-using namespace std;
-
-
 class Map {
 private:
 	IMAGE unrev;
@@ -33,8 +30,8 @@ public:
 	void set_face_dead();
 	void set_face_cool();
 	void load_assets();
-	vector<int> game_loop();
-	vector<int> wait_loop();
+	std::vector<int> game_loop();
+	std::vector<int> wait_loop();
 	void upd_block(int x, int y, char sym);
 	void exit_gui();
 };
