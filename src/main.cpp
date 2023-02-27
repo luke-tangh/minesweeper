@@ -95,6 +95,7 @@ bool click_restart(int x, int y) {
 void restart() {
 	game_over = false;
 	refresh_timer = false;
+	flag_count = 0;
 	pG->init_game();
 	pM->init_map();
 	pM->init_counters();
