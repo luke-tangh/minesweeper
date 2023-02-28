@@ -11,7 +11,7 @@ C++ version of a classic game - minesweeper.
 
 Change the constants in `conf.h` to modify the game.
 
-```
+```cpp
 constexpr int GRIND_HEIGHT = 16;
 constexpr int GRIND_WIDTH = 30;
 constexpr int MAX_MINES = 99;
