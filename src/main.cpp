@@ -34,7 +34,7 @@ void click_block(int x, int y) {
 	if (valid_axis(x, y)) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		vector<CellInfo> cells;
+		vector<CellInfo> cells = {};
 		pG->click_pos(x_idx, y_idx, cells);
 		for (CellInfo ci : cells) {
 			int x_pic = ci.y * BLOCK + GAP;
@@ -75,8 +75,8 @@ void search_block(int x, int y) {
 	if (valid_axis(x, y) && !game_over) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		vector<CellInfo> cells;
-		pG->click_pos(x_idx, y_idx, cells);
+		vector<CellInfo> cells = {};
+		pG->search_pos(x_idx, y_idx, cells);
 		for (CellInfo ci : cells) {
 			int x_pic = ci.y * BLOCK + GAP;
 			int y_pic = ci.x * BLOCK + HEAD;
@@ -134,7 +134,7 @@ int main() {
 	pM->display_map();
 	pM->init_counters();
 	pM->init_map();
-	// pGame->print_map(0);
+	// pG->print_map(0);
 
 	vector<int> axis = pM->game_loop();
 
@@ -186,7 +186,7 @@ int main() {
 
 	game_exit = true;
 	timer.join();
-	// pGame->print_map(1);
+	pG->print_map(1);
 	// cout << click_count << endl;
 	pM->exit_gui();
 

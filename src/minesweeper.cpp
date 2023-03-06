@@ -28,6 +28,7 @@ bool valid_pos(int x, int y) {
 }
 
 
+
 Grid::Grid() {
     user_map = {};
     sys_map = {};
@@ -225,21 +226,23 @@ bool Grid::flag_mine(int x, int y) {
 void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
     char flags = '0';
     for (int i = 0; i < 8; i++) {
-        if (valid_pos(x + v[i][0], y + v[i][1])) {
-            if (user_map[x + v[i][0]][y + v[i][1]] == FLAG) {
+        int x_idx = x + v[i][0];
+        int y_idx = y + v[i][1];
+        if (valid_pos(x_idx, y_idx)) {
+            if (user_map[x_idx][y_idx] == FLAG) {
                 flags++;
             }
             else {
-                cells.push_back({ x + v[i][0], y + v[i][1], sys_map[x + v[i][0]][y + v[i][1]] });
+                cells.push_back({ x_idx, y_idx, sys_map[x_idx][y_idx] });
             }
         }
     }
     if (flags != sys_map[x][y]) {
         cells.clear();
     }
-    for (CellInfo ci: cells) {
-        if (is_mine(ci.x, ci.y)) {
-            cells.push_back({ci.x, ci.y, REV_MINE});
+    for (int i = 0; i < cells.size(); ++i) {
+        if (is_mine(cells[i].x, cells[i].y)) {
+            cells[i].sym = REV_MINE;
             // check wrongly flagged position
             for (int i = 0; i < sys_map.size(); ++i) {
                 for (int j = 0; j < sys_map[0].size(); ++j) {
@@ -252,7 +255,7 @@ void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
             refresh_timer = false;  // stop timer
         }
         else {
-            click_dfs(ci.x, ci.y, cells);
+            click_dfs(cells[i].x, cells[i].y, cells);
         }
     }
     return;

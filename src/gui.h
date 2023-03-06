@@ -20,7 +20,6 @@ private:
 	IMAGE digit_9, digit_null, digit_empty;
 public:
 	Map();
-	void init_gui();
 	void init_map();
 	void display_map();
 	void init_counters();
