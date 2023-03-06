@@ -19,10 +19,10 @@ int gen_rand(int ub) {
 
 // return true if x, y is a valid pair
 bool valid_pos(int x, int y) {
-    if (x >= GRIND_HEIGHT || x < 0) {
+    if (x >= GRID_HEIGHT || x < 0) {
         return false;
     }
-    if (y >= GRIND_WIDTH || y < 0) {
+    if (y >= GRID_WIDTH || y < 0) {
         return false;
     }
     return true;
@@ -30,7 +30,7 @@ bool valid_pos(int x, int y) {
 
 
 // initialise game variables
-void Grind::init_game() {
+void Grid::init_game() {
     // first_click = true;
     click_count = 0;
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
@@ -39,7 +39,7 @@ void Grind::init_game() {
 
 
 // initialise maps
-void Grind::init_maps() {
+void Grid::init_maps() {
     srand(time(0));  // set random seed
     init_sys_map();
     init_user_map();
@@ -48,11 +48,11 @@ void Grind::init_maps() {
 
 
 // initialise system map
-void Grind::init_sys_map() {
+void Grid::init_sys_map() {
     sys_map.clear();
-    for (int i = 0; i < GRIND_HEIGHT; ++i) {
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
         vector<char> col;
-        for (int j = 0; j < GRIND_WIDTH; ++j) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
             col.push_back(BLANK);
         }
         sys_map.push_back(col);
@@ -61,11 +61,11 @@ void Grind::init_sys_map() {
 
 
 // initialise user map
-void Grind::init_user_map() {
+void Grid::init_user_map() {
     user_map.clear();
-    for (int i = 0; i < GRIND_HEIGHT; ++i) {
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
         vector<char> col;
-        for (int j = 0; j < GRIND_WIDTH; ++j) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
             col.push_back(UNREV);
         }
         user_map.push_back(col);
@@ -74,10 +74,10 @@ void Grind::init_user_map() {
 
 
 // print the indexed map 0:sys_map; 1:user_map
-void Grind::print_map(int idx) {
+void Grid::print_map(int idx) {
     // print index
     cout << setw(2) << ' ';
-    for (int i = 0; i < GRIND_WIDTH; ++i) {
+    for (int i = 0; i < GRID_WIDTH; ++i) {
         cout << setw(2) << i;
     }
     cout << '\n';
@@ -107,13 +107,13 @@ void Grind::print_map(int idx) {
 
 
 // generate mines in the map
-void Grind::gen_mines() {
+void Grid::gen_mines() {
     for (int i = 0; i < MAX_MINES; ++i) {
-        int x = gen_rand(GRIND_HEIGHT);
-        int y = gen_rand(GRIND_WIDTH);
+        int x = gen_rand(GRID_HEIGHT);
+        int y = gen_rand(GRID_WIDTH);
         while (sys_map[x][y] == MINE) {
-            x = gen_rand(GRIND_HEIGHT);
-            y = gen_rand(GRIND_WIDTH);
+            x = gen_rand(GRID_HEIGHT);
+            y = gen_rand(GRID_WIDTH);
         }
         sys_map[x][y] = MINE;
         for (int i = 0; i < 8; i++) {
@@ -126,25 +126,25 @@ void Grind::gen_mines() {
 
 
 // return true if mine hit
-bool Grind::is_mine(int x, int y) {
+bool Grid::is_mine(int x, int y) {
     return sys_map[x][y] == MINE;
 }
 
 
 // check if the player wins
-bool Grind::check_win() {
+bool Grid::check_win() {
     return click_count == BLOCKS - MAX_MINES;
 }
 
 
 // return symbol on usermap
-char Grind::get_user_pos(int x, int y) {
+char Grid::get_user_pos(int x, int y) {
     return user_map[x][y];
 }
 
 
 // dfs algorithm
-void Grind::click_dfs(int x, int y) {
+void Grid::click_dfs(int x, int y) {
     if (!valid_pos(x, y) || user_map[x][y] != UNREV) {
         return;
     }
@@ -168,7 +168,7 @@ void Grind::click_dfs(int x, int y) {
 
 
 // click a position
-map<vector<int>, char> Grind::click_pos(int x, int y) {
+map<vector<int>, char> Grid::click_pos(int x, int y) {
     positions.clear();
     if (!valid_pos(x, y)) {
         return positions;
@@ -205,7 +205,7 @@ map<vector<int>, char> Grind::click_pos(int x, int y) {
 
 
 // true: set flag | false: cancel flag
-bool Grind::flag_mine(int x, int y) {
+bool Grid::flag_mine(int x, int y) {
     if (user_map[x][y] == FLAG) {
         user_map[x][y] = UNREV;
         return false;
@@ -218,7 +218,7 @@ bool Grind::flag_mine(int x, int y) {
 
 
 // search a block (middle click)
-map<vector<int>, char> Grind::search_pos(int x, int y) {
+map<vector<int>, char> Grid::search_pos(int x, int y) {
     positions.clear();
     char flags = '0';
     for (int i = 0; i < 8; i++) {

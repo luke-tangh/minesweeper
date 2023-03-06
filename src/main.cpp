@@ -17,7 +17,7 @@ bool refresh_timer = false;
 
 
 static unique_ptr<Map> pM(new Map);
-static unique_ptr<Grind> pG(new Grind);
+static unique_ptr<Grid> pG(new Grid);
 static bool game_exit = false;  // `esc` is pressed
 static int flag_count = 0;
 static int t_start = 0;
@@ -26,7 +26,7 @@ static int t_end = 0;
 
 // if axis lands in the grind
 bool valid_axis(int x, int y) {
-	return (x > GAP && x < GAP + GRIND_WIDTH * 16 && y > HEAD && y < GRIND_HEIGHT * 16 + HEAD);
+	return (x > GAP && x < GAP + GRID_WIDTH * 16 && y > HEAD && y < GRID_HEIGHT * 16 + HEAD);
 }
 
 

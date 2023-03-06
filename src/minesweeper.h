@@ -8,7 +8,7 @@ bool valid_pos(int x, int y);
 
 
 // base class for user_map and sys_map
-class Grind {
+class Grid {
 private:
 	std::vector<std::vector<char>> user_map;
 	std::vector<std::vector<char>> sys_map;

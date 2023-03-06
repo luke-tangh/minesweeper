@@ -6,10 +6,10 @@ extern bool refresh_timer;
 
 
 /* map settings chars */
-constexpr int GRIND_HEIGHT = 16;  // 16
-constexpr int GRIND_WIDTH = 30;  // 30
+constexpr int GRID_HEIGHT = 16;  // 16
+constexpr int GRID_WIDTH = 30;  // 30
 constexpr int MAX_MINES = 99;  // 99
-constexpr int BLOCKS = GRIND_HEIGHT * GRIND_WIDTH;
+constexpr int BLOCKS = GRID_HEIGHT * GRID_WIDTH;
 
 
 /* map chars */
@@ -26,9 +26,9 @@ constexpr int GAP = 10;
 constexpr int HEAD = 50;
 constexpr int FACE = 24;
 constexpr int BLOCK = 16;  // 16 pixel per block
-constexpr int MAP_WIDTH = GRIND_WIDTH * 16 + GAP * 2;
-constexpr int MAP_HEIGHT = GRIND_HEIGHT * 16 + GAP + HEAD;
-constexpr int FACE_X = GRIND_WIDTH * 16 / 2 + GAP - 12;
+constexpr int MAP_WIDTH = GRID_WIDTH * 16 + GAP * 2;
+constexpr int MAP_HEIGHT = GRID_HEIGHT * 16 + GAP + HEAD;
+constexpr int FACE_X = GRID_WIDTH * 16 / 2 + GAP - 12;
 constexpr int FACE_Y = HEAD / 2 - 12;
 constexpr int DIGIT_WIDTH = 13;
 constexpr int DIGIT_HEIGHT = 23;

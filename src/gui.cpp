@@ -21,8 +21,8 @@ void Map::init_gui() {
 
 // initialise map
 void Map::init_map() {
-	for (int i = GAP; i < GRIND_WIDTH * 16 + GAP; i += 16) {
-		for (int j = HEAD; j < GRIND_HEIGHT * 16 + HEAD; j += 16) {
+	for (int i = GAP; i < GRID_WIDTH * 16 + GAP; i += 16) {
+		for (int j = HEAD; j < GRID_HEIGHT * 16 + HEAD; j += 16) {
 			putimage(i, j, &unrev);
 		}
 	}
