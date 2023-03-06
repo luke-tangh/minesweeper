@@ -19,6 +19,7 @@ private:
 	IMAGE digit_6, digit_7, digit_8;
 	IMAGE digit_9, digit_null, digit_empty;
 public:
+	Map();
 	void init_gui();
 	void init_map();
 	void display_map();

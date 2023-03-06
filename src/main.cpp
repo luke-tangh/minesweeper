@@ -2,7 +2,6 @@
 #include <thread>
 #include <vector>
 #include <ctime>
-#include <map>
 #include "minesweeper.h"
 #include "conf.h"
 #include "gui.h"
@@ -35,11 +34,12 @@ void click_block(int x, int y) {
 	if (valid_axis(x, y)) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		map<vector<int>, char> positions = pG->click_pos(x_idx, y_idx);
-		for (pair<vector<int>, char> kv : positions) {
-			int x_pic = kv.first[1] * BLOCK + GAP;
-			int y_pic = kv.first[0] * BLOCK + HEAD;
-			pM->upd_block(x_pic, y_pic, kv.second);
+		vector<CellInfo> cells;
+		pG->click_pos(x_idx, y_idx, cells);
+		for (CellInfo ci : cells) {
+			int x_pic = ci.y * BLOCK + GAP;
+			int y_pic = ci.x * BLOCK + HEAD;
+			pM->upd_block(x_pic, y_pic, ci.sym);
 		}
 	}
 }
@@ -75,11 +75,12 @@ void search_block(int x, int y) {
 	if (valid_axis(x, y) && !game_over) {
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		map<vector<int>, char> positions = pG->search_pos(x_idx, y_idx);
-		for (pair<vector<int>, char> kv : positions) {
-			int x_pic = kv.first[1] * BLOCK + GAP;
-			int y_pic = kv.first[0] * BLOCK + HEAD;
-			pM->upd_block(x_pic, y_pic, kv.second);
+		vector<CellInfo> cells;
+		pG->click_pos(x_idx, y_idx, cells);
+		for (CellInfo ci : cells) {
+			int x_pic = ci.y * BLOCK + GAP;
+			int y_pic = ci.x * BLOCK + HEAD;
+			pM->upd_block(x_pic, y_pic, ci.sym);
 		}
 	}
 }
@@ -129,7 +130,6 @@ int main() {
 	timer = thread(upd_time);
 
 	pG->init_game();
-	pM->init_gui();
 	pM->load_assets();
 	pM->display_map();
 	pM->init_counters();

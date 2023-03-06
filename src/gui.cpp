@@ -11,7 +11,7 @@ using namespace std;
 
 
 // initialise gui
-void Map::init_gui() {
+Map::Map() {
 	initgraph(MAP_WIDTH, MAP_HEIGHT);
 	// set background grey and refresh screen
 	setbkcolor(RGB(192, 192, 192));

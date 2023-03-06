@@ -3,7 +3,6 @@
 #include <iomanip>
 #include <vector>
 #include <ctime>
-#include <map>
 #include "minesweeper.h"
 #include "conf.h"
 
@@ -29,11 +28,17 @@ bool valid_pos(int x, int y) {
 }
 
 
+Grid::Grid() {
+    user_map = {};
+    sys_map = {};
+    v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
+}
+
+
 // initialise game variables
 void Grid::init_game() {
     // first_click = true;
     click_count = 0;
-    v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
     init_maps();
 };
 
@@ -144,7 +149,7 @@ char Grid::get_user_pos(int x, int y) {
 
 
 // dfs algorithm
-void Grid::click_dfs(int x, int y) {
+void Grid::click_dfs(int x, int y, vector<CellInfo>& cells) {
     if (!valid_pos(x, y) || user_map[x][y] != UNREV) {
         return;
     }
@@ -152,13 +157,13 @@ void Grid::click_dfs(int x, int y) {
         char nearby_mines = sys_map[x][y];
         if (nearby_mines > '0') {
             user_map[x][y] = nearby_mines;
-            positions[{x, y}] = nearby_mines;
+            cells.push_back({ x, y, nearby_mines });
         }
         else {
-            positions[{x, y}] = BLANK;
+            cells.push_back({ x, y, BLANK });
             user_map[x][y] = BLANK;
             for (int i = 0; i < 8; i++) {
-                click_dfs(x + v[i][0], y + v[i][1]);
+                click_dfs(x + v[i][0], y + v[i][1], cells);
             }
         }
         click_count++;
@@ -168,10 +173,9 @@ void Grid::click_dfs(int x, int y) {
 
 
 // click a position
-map<vector<int>, char> Grid::click_pos(int x, int y) {
-    positions.clear();
+void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
     if (!valid_pos(x, y)) {
-        return positions;
+        return;
     }
     // while (first_click && sys_map[x][y] != BLANK) {
     //     init_maps();
@@ -180,27 +184,27 @@ map<vector<int>, char> Grid::click_pos(int x, int y) {
     if (is_mine(x, y)) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = REV_MINE;
-            positions[{x, y}] = REV_MINE;
+            cells.push_back({ x, y, REV_MINE });
             game_over = true;
             refresh_timer = false;  // stop timer
             // check wrongly flagged position
             for (int i = 0; i < sys_map.size(); ++i) {
                 for (int j = 0; j < sys_map[0].size(); ++j) {
                     if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
-                        positions[{i, j}] = FLAG_WRONG;
+                        cells.push_back({ i, j, FLAG_WRONG });
                     }
                 }
             }
         }
-        return positions;
+        return;
     }
-    click_dfs(x, y);
+    click_dfs(x, y, cells);
     for (int i = 0; i < 8; i++) {
         if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] == BLANK) {
-            click_dfs(x + v[i][0], y + v[i][1]);
+            click_dfs(x + v[i][0], y + v[i][1], cells);
         }
     }
-    return positions;
+    return;
 }
 
 
@@ -218,8 +222,7 @@ bool Grid::flag_mine(int x, int y) {
 
 
 // search a block (middle click)
-map<vector<int>, char> Grid::search_pos(int x, int y) {
-    positions.clear();
+void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
     char flags = '0';
     for (int i = 0; i < 8; i++) {
         if (valid_pos(x + v[i][0], y + v[i][1])) {
@@ -227,21 +230,21 @@ map<vector<int>, char> Grid::search_pos(int x, int y) {
                 flags++;
             }
             else {
-                positions[{x + v[i][0], y + v[i][1]}] = sys_map[x + v[i][0]][y + v[i][1]];
+                cells.push_back({ x + v[i][0], y + v[i][1], sys_map[x + v[i][0]][y + v[i][1]] });
             }
         }
     }
     if (flags != sys_map[x][y]) {
-        positions.clear();
+        cells.clear();
     }
-    for (pair<vector<int>, char> kv : positions) {
-        if (is_mine(kv.first[0], kv.first[1])) {
-            positions[{kv.first[0], kv.first[1]}] = REV_MINE;
+    for (CellInfo ci: cells) {
+        if (is_mine(ci.x, ci.y)) {
+            cells.push_back({ci.x, ci.y, REV_MINE});
             // check wrongly flagged position
             for (int i = 0; i < sys_map.size(); ++i) {
                 for (int j = 0; j < sys_map[0].size(); ++j) {
                     if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
-                        positions[{i, j}] = FLAG_WRONG;
+                        cells.push_back({i, j, FLAG_WRONG});
                     }
                 }
             }
@@ -249,8 +252,8 @@ map<vector<int>, char> Grid::search_pos(int x, int y) {
             refresh_timer = false;  // stop timer
         }
         else {
-            click_dfs(kv.first[0], kv.first[1]);
+            click_dfs(ci.x, ci.y, cells);
         }
     }
-    return positions;
+    return;
 }
