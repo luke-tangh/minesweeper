@@ -130,35 +130,33 @@ int main() {
 	timer = thread(upd_time);
 
 	pG->init_game();
-	pM->load_assets();
-	pM->display_map();
 	pM->init_counters();
 	pM->init_map();
 	// pG->print_map(0);
 
-	vector<int> axis = pM->game_loop();
+	CellInfo axis = pM->game_loop();
 
-	while (!axis.empty()) {
+	while (axis.sym != KEY_ESC) {
 		// game loop
-		while (!axis.empty() && !game_over) {
-			switch (axis[0]) {
-			case 0:
+		while (axis.sym != KEY_ESC && !game_over) {
+			switch (axis.sym) {
+			case KEY_R:
 				restart();
 				break;
-			case 1:
+			case MOUSE_LEFT:
 				check_timer();
-				click_block(axis[1], axis[2]);
-				if (click_restart(axis[1], axis[2])) {
+				click_block(axis.x, axis.y);
+				if (click_restart(axis.x, axis.y)) {
 					restart();
 				}
 				break;
-			case 2:
+			case MOUSE_RIGHT:
 				check_timer();
-				flag_block(axis[1], axis[2]);
+				flag_block(axis.x, axis.y);
 				break;
-			case 3:
+			case MOUSE_MIDDLE:
 				check_timer();
-				search_block(axis[1], axis[2]);
+				search_block(axis.x, axis.y);
 				break;
 			}
 			if (game_over) pM->set_face_dead();
@@ -170,13 +168,13 @@ int main() {
 			axis = pM->game_loop();
 		}
 		// wait loop
-		if (!axis.empty()) {
-			switch (axis[0]) {
-			case 0:
+		if (axis.sym != KEY_ESC) {
+			switch (axis.sym) {
+			case KEY_R:
 				restart();
 				break;
-			case 1:
-				if (click_restart(axis[1], axis[2])) {
+			case MOUSE_LEFT:
+				if (click_restart(axis.x, axis.y)) {
 					restart();
 				}
 			}
@@ -186,7 +184,7 @@ int main() {
 
 	game_exit = true;
 	timer.join();
-	pG->print_map(1);
+	// pG->print_map(1);
 	// cout << click_count << endl;
 	pM->exit_gui();
 

@@ -16,6 +16,8 @@ Map::Map() {
 	// set background grey and refresh screen
 	setbkcolor(RGB(192, 192, 192));
 	cleardevice();
+	load_assets();
+	display_map();
 }
 
 
@@ -163,50 +165,50 @@ void Map::load_assets() {
 
 
 /*
-vector.empty() : exit
-vector[0] = 0 : KEYBOARD 'R' -> restart
-vector[0] = 1 : LEFTCLICK -> click
-vector[0] = 2 : RIGHTCLICK -> flag
-vector[0] = 3 : MIDDLECLICK -> search
+* CellInfo.sym : KEYBOARD 'ESC' -> exit
+* CellInfo.sym : KEYBOARD 'R' -> restart
+* CellInfo.sym : LEFTCLICK -> click
+* CellInfo.sym : RIGHTCLICK -> flag
+* CellInfo.sym : MIDDLECLICK -> search
 */
-vector<int> Map::game_loop() {
+CellInfo Map::game_loop() {
 	ExMessage m;
 	while (true) {
 		m = getmessage(EX_MOUSE | EX_KEY);
 		switch (m.message) {
 		case WM_LBUTTONDOWN:
-			return { 1, m.x, m.y };
+			return { m.x, m.y, MOUSE_LEFT };
 		case WM_RBUTTONDOWN:
-			return { 2, m.x, m.y };
+			return { m.x, m.y, MOUSE_RIGHT };
 		case WM_MBUTTONDOWN: 
-			return { 3, m.x, m.y };
+			return { m.x, m.y, MOUSE_MIDDLE };
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
-				return {};
-			if (m.vkcode == 0x52) // 'R'
-				return {0};
+				return { 0, 0, KEY_ESC };
+			if (m.vkcode == 0x52)  // 'R'
+				return { 0, 0, KEY_R };
 		}
 	}
 }
 
 
 /*
-vector.empty() : exit
-vector[0] = 0 : KEYBOARD 'R' -> restart
-vector[0] = 1 : LEFTCLICK -> click
+* CellInfo.sym : KEYBOARD 'ESC' -> exit
+* CellInfo.sym : KEYBOARD 'R' -> restart
+* CellInfo.sym : LEFTCLICK -> click
 */
-vector<int> Map::wait_loop() {
+CellInfo Map::wait_loop() {
 	ExMessage m;
 	while (true) {
 		m = getmessage(EX_MOUSE | EX_KEY);
 		switch (m.message) {
 		case WM_LBUTTONDOWN:
-			return { 1, m.x, m.y };
+			return { m.x, m.y, MOUSE_LEFT };
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
-				return {};
-			if (m.vkcode == 0x52) // 'R'
-				return { 0 };
+				return { 0, 0, KEY_ESC };
+			if (m.vkcode == 0x52)  // 'R'
+				return { 0, 0, KEY_R };
 		}
 	}
 }
@@ -219,7 +221,7 @@ void Map::upd_block(int x, int y, char sym) {
 	case BLANK: putimage(x, y, &blank); break;
 	case MINE: putimage(x, y, &mine); break;
 	case FLAG: putimage(x, y, &flag); break;
-	case REV_MINE: putimage(x, y, &mine_click); break;
+	case MINE_REV: putimage(x, y, &mine_click); break;
 	case FLAG_WRONG: putimage(x, y , &flag_wrong); break;
 	case '1': putimage(x, y, &num_1); break;
 	case '2': putimage(x, y, &num_2); break;

@@ -30,8 +30,8 @@ public:
 	void set_face_dead();
 	void set_face_cool();
 	void load_assets();
-	std::vector<int> game_loop();
-	std::vector<int> wait_loop();
+	CellInfo game_loop();
+	CellInfo wait_loop();
 	void upd_block(int x, int y, char sym);
 	void exit_gui();
 };

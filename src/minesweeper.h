@@ -34,6 +34,7 @@ public:
 	void print_map(int idx);
 	bool is_mine(int x, int y);
 	bool flag_mine(int x, int y);
+	void check_wrong_flag(std::vector<CellInfo>& cells);
 	void click_dfs(int x, int y, std::vector<CellInfo> &cells);
 	void click_pos(int x, int y, std::vector<CellInfo> &cells);
 	void search_pos(int x, int y, std::vector<CellInfo> &cells);

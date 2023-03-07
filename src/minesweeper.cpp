@@ -184,8 +184,8 @@ void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
     // first_click = false;
     if (is_mine(x, y)) {
         if (user_map[x][y] != FLAG) {
-            user_map[x][y] = REV_MINE;
-            cells.push_back({ x, y, REV_MINE });
+            user_map[x][y] = MINE_REV;
+            cells.push_back({ x, y, MINE_REV });
             game_over = true;
             refresh_timer = false;  // stop timer
             // check wrongly flagged position
@@ -222,9 +222,24 @@ bool Grid::flag_mine(int x, int y) {
 }
 
 
+// check wrongly flagged position
+void Grid::check_wrong_flag(std::vector<CellInfo>& cells) {
+    for (int i = 0; i < sys_map.size(); ++i) {
+        for (int j = 0; j < sys_map[0].size(); ++j) {
+            if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
+                cells.push_back({ i, j, FLAG_WRONG });
+            }
+        }
+    }
+}
+
+
 // search a block (middle click)
 void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
     char flags = '0';
+    if (user_map[x][y] == UNREV) {
+        return;
+    }
     for (int i = 0; i < 8; i++) {
         int x_idx = x + v[i][0];
         int y_idx = y + v[i][1];
@@ -242,15 +257,8 @@ void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
     }
     for (int i = 0; i < cells.size(); ++i) {
         if (is_mine(cells[i].x, cells[i].y)) {
-            cells[i].sym = REV_MINE;
-            // check wrongly flagged position
-            for (int i = 0; i < sys_map.size(); ++i) {
-                for (int j = 0; j < sys_map[0].size(); ++j) {
-                    if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
-                        cells.push_back({i, j, FLAG_WRONG});
-                    }
-                }
-            }
+            cells[i].sym = MINE_REV;
+            check_wrong_flag(cells);
             game_over = true;
             refresh_timer = false;  // stop timer
         }

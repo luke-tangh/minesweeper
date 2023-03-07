@@ -14,10 +14,10 @@ constexpr int BLOCKS = GRID_HEIGHT * GRID_WIDTH;
 
 /* map chars */
 constexpr char MINE = 'M';
-constexpr char REV_MINE = 'X';
+constexpr char MINE_REV = 'X';
 constexpr char BLANK = '0';  // `0`: no adjacent mines
-constexpr char FLAG = 'F';
 constexpr char UNREV = '.';
+constexpr char FLAG = 'F';
 constexpr char FLAG_WRONG = 'W';
 
 
@@ -36,3 +36,11 @@ constexpr int COUNTER_LX = GAP * 2;
 constexpr int COUNTER_LY = HEAD / 2 - DIGIT_HEIGHT / 2;
 constexpr int COUNTER_RX = MAP_WIDTH - GAP * 2 - DIGIT_WIDTH * 3;
 constexpr int COUNTER_RY = HEAD / 2 - DIGIT_HEIGHT / 2;
+
+
+/* game control */
+constexpr char MOUSE_LEFT = 'L';
+constexpr char MOUSE_RIGHT = 'R';
+constexpr char MOUSE_MIDDLE = 'M';
+constexpr char KEY_ESC = 'E';
+constexpr char KEY_R = 'N';
