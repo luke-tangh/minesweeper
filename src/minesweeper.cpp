@@ -79,7 +79,7 @@ void Grid::init_user_map() {
 }
 
 
-// print the indexed map 0:sys_map; 1:user_map
+// @param idx = `0` sys_map | `1` user_map
 void Grid::print_map(int idx) {
     // print index
     cout << setw(2) << ' ';
@@ -131,19 +131,22 @@ void Grid::gen_mines() {
 }
 
 
-// return true if mine hit
+// @return true if mine hit
 bool Grid::is_mine(int x, int y) {
     return sys_map[x][y] == MINE;
 }
 
 
-// check if the player wins
+// @return true if player wins
 bool Grid::check_win() {
     return click_count == BLOCKS - MAX_MINES;
 }
 
 
-// return symbol on usermap
+/*
+* @param axis int x, int y
+* @return char at axis in user_map
+*/
 char Grid::get_user_pos(int x, int y) {
     return user_map[x][y];
 }
@@ -205,11 +208,10 @@ void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
             click_dfs(x + v[i][0], y + v[i][1], cells);
         }
     }
-    return;
 }
 
 
-// true: set flag | false: cancel flag
+// @return true: set flag | false: cancel flag
 bool Grid::flag_mine(int x, int y) {
     if (user_map[x][y] == FLAG) {
         user_map[x][y] = UNREV;
@@ -266,5 +268,4 @@ void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
             click_dfs(cells[i].x, cells[i].y, cells);
         }
     }
-    return;
 }

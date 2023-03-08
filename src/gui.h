@@ -31,7 +31,6 @@ public:
 	void set_face_cool();
 	void load_assets();
 	CellInfo game_loop();
-	CellInfo wait_loop();
 	void upd_block(int x, int y, char sym);
 	void exit_gui();
 };

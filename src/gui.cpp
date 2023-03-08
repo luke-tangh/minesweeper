@@ -185,29 +185,7 @@ CellInfo Map::game_loop() {
 		case WM_KEYDOWN:
 			if (m.vkcode == VK_ESCAPE)
 				return { 0, 0, KEY_ESC };
-			if (m.vkcode == 0x52)  // 'R'
-				return { 0, 0, KEY_R };
-		}
-	}
-}
-
-
-/*
-* CellInfo.sym : KEYBOARD 'ESC' -> exit
-* CellInfo.sym : KEYBOARD 'R' -> restart
-* CellInfo.sym : LEFTCLICK -> click
-*/
-CellInfo Map::wait_loop() {
-	ExMessage m;
-	while (true) {
-		m = getmessage(EX_MOUSE | EX_KEY);
-		switch (m.message) {
-		case WM_LBUTTONDOWN:
-			return { m.x, m.y, MOUSE_LEFT };
-		case WM_KEYDOWN:
-			if (m.vkcode == VK_ESCAPE)
-				return { 0, 0, KEY_ESC };
-			if (m.vkcode == 0x52)  // 'R'
+			if (m.vkcode == 0x52)
 				return { 0, 0, KEY_R };
 		}
 	}
@@ -220,8 +198,8 @@ void Map::upd_block(int x, int y, char sym) {
 	case UNREV: putimage(x, y, &unrev); break;
 	case BLANK: putimage(x, y, &blank); break;
 	case MINE: putimage(x, y, &mine); break;
-	case FLAG: putimage(x, y, &flag); break;
 	case MINE_REV: putimage(x, y, &mine_click); break;
+	case FLAG: putimage(x, y, &flag); break;
 	case FLAG_WRONG: putimage(x, y , &flag_wrong); break;
 	case '1': putimage(x, y, &num_1); break;
 	case '2': putimage(x, y, &num_2); break;

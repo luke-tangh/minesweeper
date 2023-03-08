@@ -1,5 +1,16 @@
 #pragma once
 
+
+/* game control */
+enum Input {
+    KEY_ESC = -1,
+    KEY_R = 0,
+    MOUSE_LEFT = 1,
+    MOUSE_RIGHT = 2,
+    MOUSE_MIDDLE = 3
+};
+
+
 /* global variables */
 extern bool game_over;
 extern bool refresh_timer;
@@ -36,11 +47,3 @@ constexpr int COUNTER_LX = GAP * 2;
 constexpr int COUNTER_LY = HEAD / 2 - DIGIT_HEIGHT / 2;
 constexpr int COUNTER_RX = MAP_WIDTH - GAP * 2 - DIGIT_WIDTH * 3;
 constexpr int COUNTER_RY = HEAD / 2 - DIGIT_HEIGHT / 2;
-
-
-/* game control */
-constexpr char MOUSE_LEFT = 'L';
-constexpr char MOUSE_RIGHT = 'R';
-constexpr char MOUSE_MIDDLE = 'M';
-constexpr char KEY_ESC = 'E';
-constexpr char KEY_R = 'N';
