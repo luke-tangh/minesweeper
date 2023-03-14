@@ -21,19 +21,21 @@ private:
 	std::vector<std::vector<char>> sys_map;
 	std::vector<std::vector<int>> v;
 	int click_count;
-	// bool first_click;
+	bool first_click;
 public:
 	Grid();
 	void init_game();
 	void init_maps();
 	void init_sys_map();
 	void init_user_map();
+	void inc_cells(int x, int y);
 	void gen_mines();
 	bool check_win();
 	char get_user_pos(int x, int y);
 	void print_map(int idx);
 	bool is_mine(int x, int y);
 	bool flag_mine(int x, int y);
+	void alt_mine(int x, int y);
 	void check_wrong_flag(std::vector<CellInfo>& cells);
 	void click_dfs(int x, int y, std::vector<CellInfo> &cells);
 	void click_pos(int x, int y, std::vector<CellInfo> &cells);

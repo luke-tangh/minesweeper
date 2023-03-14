@@ -38,7 +38,7 @@ Grid::Grid() {
 
 // initialise game variables
 void Grid::init_game() {
-    // first_click = true;
+    first_click = true;
     click_count = 0;
     init_maps();
 };
@@ -112,6 +112,15 @@ void Grid::print_map(int idx) {
 }
 
 
+void Grid::inc_cells(int x, int y) {
+    for (int i = 0; i < 8; i++) {
+        if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] != MINE) {
+            sys_map[x + v[i][0]][y + v[i][1]]++;
+        }
+    }
+}
+
+
 // generate mines in the map
 void Grid::gen_mines() {
     for (int i = 0; i < MAX_MINES; ++i) {
@@ -122,11 +131,7 @@ void Grid::gen_mines() {
             y = gen_rand(GRID_WIDTH);
         }
         sys_map[x][y] = MINE;
-        for (int i = 0; i < 8; i++) {
-            if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] != MINE) {
-                sys_map[x + v[i][0]][y + v[i][1]]++;
-            }
-        }
+        inc_cells(x, y);
     }
 }
 
@@ -134,6 +139,31 @@ void Grid::gen_mines() {
 // @return true if mine hit
 bool Grid::is_mine(int x, int y) {
     return sys_map[x][y] == MINE;
+}
+
+
+void Grid::alt_mine(int x, int y) {
+    // reverse the surrounding cells
+    for (int i = 0; i < 8; i++) {
+        if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] != MINE) {
+            sys_map[x + v[i][0]][y + v[i][1]]--;
+        }
+    }
+    // calculate the number on the cell
+    sys_map[x][y] = BLANK;
+    for (int i = 0; i < 8; i++) {
+        if (valid_pos(x + v[i][0], y + v[i][1]) && sys_map[x + v[i][0]][y + v[i][1]] == MINE) {
+            sys_map[x][y]++;
+        }
+    }
+    int new_x = gen_rand(GRID_HEIGHT);
+    int new_y = gen_rand(GRID_WIDTH);
+    while (sys_map[x][y] == MINE && (new_x == x && new_y == y)) {
+        new_x = gen_rand(GRID_HEIGHT);
+        new_y = gen_rand(GRID_WIDTH);
+    }
+    sys_map[new_x][new_y] = MINE;
+    inc_cells(new_x, new_y);
 }
 
 
@@ -181,10 +211,10 @@ void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
     if (!valid_pos(x, y)) {
         return;
     }
-    // while (first_click && sys_map[x][y] != BLANK) {
-    //     init_maps();
-    // }
-    // first_click = false;
+    if (first_click && sys_map[x][y] == MINE) {
+        alt_mine(x, y);
+    }
+    first_click = false;
     if (is_mine(x, y)) {
         if (user_map[x][y] != FLAG) {
             user_map[x][y] = MINE_REV;

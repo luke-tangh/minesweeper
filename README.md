@@ -17,7 +17,10 @@ constexpr int GRIND_WIDTH = 30;
 constexpr int MAX_MINES = 99;
 ```
 
-`MAX_MINES` should not be greater than the product of `GRIND_HEIGHT` and `GRIND_WIDTH`.
+- `MAX_MINES` should not be greater than the product of `GRIND_HEIGHT` and `GRIND_WIDTH`.
+
+- The first click will not hit mine.
+
 
 **Shortkeys:**
 - `LEFTCLICK` - open a cell

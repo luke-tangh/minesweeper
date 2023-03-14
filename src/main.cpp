@@ -48,7 +48,7 @@ void restart(int x, int y) {
 
 // left click a block
 void click_block(int x, int y) {
-	if (click_restart(x, y)) { restart(x, y); }
+	if (click_restart(x, y)) restart(x, y);
 	else {
 		if (!valid_axis(x, y) || game_over) return;
 		int x_idx = (y - HEAD) / BLOCK;
@@ -90,7 +90,7 @@ void flag_block(int x, int y) {
 
 // middle click a block
 void search_block(int x, int y) {
-	if (!valid_axis(x, y) || game_over) { return; }
+	if (!valid_axis(x, y) || game_over) return;
 	int x_idx = (y - HEAD) / BLOCK;
 	int y_idx = (x - GAP) / BLOCK;
 	vector<CellInfo> cells = {};
@@ -146,7 +146,7 @@ int main() {
 	// game loop
 	while (axis.sym != KEY_ESC) {
 		if (axis.sym >= KEY_R && axis.sym <= MOUSE_MIDDLE) {
-			check_timer();
+			if (!game_over) check_timer();
 			MapFuncPtr[axis.sym](axis.x, axis.y);
 		}
 		if (game_over) pM->set_face_dead();
