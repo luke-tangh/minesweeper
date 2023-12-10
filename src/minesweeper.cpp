@@ -1,19 +1,15 @@
-﻿#include <iostream>
+﻿#include <algorithm>
+#include <iostream>
 #include <cstdlib>
 #include <iomanip>
 #include <vector>
+#include <random>
 #include <ctime>
 #include "minesweeper.h"
 #include "conf.h"
 
 
 using namespace std;
-
-
-// return random number from 0 to `ub` exclusively
-int gen_rand(int ub) {
-    return rand() % ub;
-}
 
 
 // return true if x, y is a valid pair
@@ -30,8 +26,11 @@ bool valid_pos(int x, int y) {
 
 
 Grid::Grid() {
+    first_click = true;
+    click_count = 0;
     user_map = {};
     sys_map = {};
+    empty_blocks = {};
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
 }
 
@@ -47,9 +46,21 @@ void Grid::init_game() {
 // initialise maps
 void Grid::init_maps() {
     srand(time(0));  // set random seed
+    init_empty_blocks();
     init_sys_map();
     init_user_map();
-    gen_mines();
+    gen_mines(MAX_MINES);
+}
+
+
+void Grid::init_empty_blocks() {
+    empty_blocks.clear();
+    for (int i = 0; i < GRID_HEIGHT; ++i) {
+        for (int j = 0; j < GRID_WIDTH; ++j) {
+            empty_blocks.push_back(make_pair(i, j));
+        }
+    }
+    random_shuffle(empty_blocks.begin(), empty_blocks.end());
 }
 
 
@@ -57,10 +68,7 @@ void Grid::init_maps() {
 void Grid::init_sys_map() {
     sys_map.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
-        vector<char> col;
-        for (int j = 0; j < GRID_WIDTH; ++j) {
-            col.push_back(BLANK);
-        }
+        vector<char> col(GRID_WIDTH, BLANK);
         sys_map.push_back(col);
     }
 }
@@ -70,10 +78,7 @@ void Grid::init_sys_map() {
 void Grid::init_user_map() {
     user_map.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
-        vector<char> col;
-        for (int j = 0; j < GRID_WIDTH; ++j) {
-            col.push_back(UNREV);
-        }
+        vector<char> col(GRID_WIDTH, UNREV);
         user_map.push_back(col);
     }
 }
@@ -122,16 +127,12 @@ void Grid::inc_cells(int x, int y) {
 
 
 // generate mines in the map
-void Grid::gen_mines() {
-    for (int i = 0; i < MAX_MINES; ++i) {
-        int x = gen_rand(GRID_HEIGHT);
-        int y = gen_rand(GRID_WIDTH);
-        while (sys_map[x][y] == MINE) {
-            x = gen_rand(GRID_HEIGHT);
-            y = gen_rand(GRID_WIDTH);
-        }
-        sys_map[x][y] = MINE;
-        inc_cells(x, y);
+void Grid::gen_mines(int mines) {
+    for (int i = 0; i < mines; ++i) {
+        pair<int, int> xys = empty_blocks.back();
+        empty_blocks.pop_back();
+        sys_map[xys.first][xys.second] = MINE;
+        inc_cells(xys.first, xys.second);
     }
 }
 
@@ -156,14 +157,8 @@ void Grid::alt_mine(int x, int y) {
             sys_map[x][y]++;
         }
     }
-    int new_x = gen_rand(GRID_HEIGHT);
-    int new_y = gen_rand(GRID_WIDTH);
-    while (sys_map[x][y] == MINE && (new_x == x && new_y == y)) {
-        new_x = gen_rand(GRID_HEIGHT);
-        new_y = gen_rand(GRID_WIDTH);
-    }
-    sys_map[new_x][new_y] = MINE;
-    inc_cells(new_x, new_y);
+    gen_mines(1);
+    empty_blocks.push_back(make_pair(x, y));
 }
 
 

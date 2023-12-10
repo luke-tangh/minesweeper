@@ -3,7 +3,6 @@
 #include <map>
 
 
-int gen_rand(int ub);
 bool valid_pos(int x, int y);
 
 
@@ -17,19 +16,21 @@ struct CellInfo {
 // base class for user_map and sys_map
 class Grid {
 private:
-	std::vector<std::vector<char>> user_map;
-	std::vector<std::vector<char>> sys_map;
-	std::vector<std::vector<int>> v;
 	int click_count;
 	bool first_click;
+	std::vector<std::vector<char>> user_map;
+	std::vector<std::vector<char>> sys_map;
+	std::vector<std::pair<int, int>> empty_blocks;
+	std::vector<std::vector<int>> v;
 public:
 	Grid();
 	void init_game();
 	void init_maps();
+	void init_empty_blocks();
 	void init_sys_map();
 	void init_user_map();
 	void inc_cells(int x, int y);
-	void gen_mines();
+	void gen_mines(int mines);
 	bool check_win();
 	char get_user_pos(int x, int y);
 	void print_map(int idx);
