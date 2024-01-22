@@ -1,16 +1,5 @@
-﻿#include <algorithm>
-#include <iostream>
-#include <cstdlib>
-#include <iomanip>
-#include <vector>
-#include <random>
-#include <ctime>
-#include "minesweeper.h"
+﻿#include "minesweeper.h"
 #include "conf.h"
-
-
-using namespace std;
-
 
 // return true if x, y is a valid pair
 bool valid_pos(int x, int y) {
@@ -23,8 +12,6 @@ bool valid_pos(int x, int y) {
     return true;
 }
 
-
-
 Grid::Grid() {
     first_click = true;
     click_count = 0;
@@ -34,14 +21,12 @@ Grid::Grid() {
     v = { {1,-1},{1,0},{1,1},{-1,-1},{-1,0},{-1,1},{0,-1},{0,1} };
 }
 
-
 // initialise game variables
 void Grid::init_game() {
     first_click = true;
     click_count = 0;
     init_maps();
 };
-
 
 // initialise maps
 void Grid::init_maps() {
@@ -52,70 +37,65 @@ void Grid::init_maps() {
     gen_mines(MAX_MINES);
 }
 
-
 void Grid::init_empty_blocks() {
     empty_blocks.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
         for (int j = 0; j < GRID_WIDTH; ++j) {
-            empty_blocks.push_back(make_pair(i, j));
+            empty_blocks.push_back(std::make_pair(i, j));
         }
     }
     random_shuffle(empty_blocks.begin(), empty_blocks.end());
 }
 
-
 // initialise system map
 void Grid::init_sys_map() {
     sys_map.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
-        vector<char> col(GRID_WIDTH, BLANK);
+        std::vector<char> col(GRID_WIDTH, BLANK);
         sys_map.push_back(col);
     }
 }
-
 
 // initialise user map
 void Grid::init_user_map() {
     user_map.clear();
     for (int i = 0; i < GRID_HEIGHT; ++i) {
-        vector<char> col(GRID_WIDTH, UNREV);
+        std::vector<char> col(GRID_WIDTH, UNREV);
         user_map.push_back(col);
     }
 }
 
-
 // @param idx = `0` sys_map | `1` user_map
 void Grid::print_map(int idx) {
     // print index
-    cout << setw(2) << ' ';
+    std::cout << std::setw(2) << ' ';
     for (int i = 0; i < GRID_WIDTH; ++i) {
-        cout << setw(2) << i;
+        std::cout << std::setw(2) << i;
     }
-    cout << '\n';
+    std::cout << '\n';
     
     if(idx == 0) {
         for (int i = 0; i < sys_map.size(); ++i) {
-            cout << setw(2) << right << i;
+            std::cout << std::setw(2) << std::right << i;
             for (int j = 0; j < sys_map[0].size(); ++j) {
-                cout << setw(2) << sys_map[i][j];
+                std::cout << std::setw(2) << sys_map[i][j];
             }
-            cout << '\n';
+            std::cout << '\n';
         }
     }
     else if (idx == 1){
         for (int i = 0; i < user_map.size(); ++i) {
-            cout << setw(2) << i ;
+            std::cout << std::setw(2) << i ;
             for (int j = 0; j < user_map[0].size(); ++j) {
-                cout << setw(2) << user_map[i][j];
+                std::cout << std::setw(2) << user_map[i][j];
             }
-            cout << '\n';
+            std::cout << '\n';
         }
     }
     else {
-        cout << "invalid output index" << endl;
+        std::cout << "invalid output index" << std::endl;
     }
 }
-
 
 void Grid::inc_cells(int x, int y) {
     for (int i = 0; i < 8; i++) {
@@ -125,23 +105,20 @@ void Grid::inc_cells(int x, int y) {
     }
 }
 
-
 // generate mines in the map
 void Grid::gen_mines(int mines) {
     for (int i = 0; i < mines; ++i) {
-        pair<int, int> xys = empty_blocks.back();
+        std::pair<int, int> xys = empty_blocks.back();
         empty_blocks.pop_back();
         sys_map[xys.first][xys.second] = MINE;
         inc_cells(xys.first, xys.second);
     }
 }
 
-
 // @return true if mine hit
 bool Grid::is_mine(int x, int y) {
     return sys_map[x][y] == MINE;
 }
-
 
 void Grid::alt_mine(int x, int y) {
     // reverse the surrounding cells
@@ -158,15 +135,13 @@ void Grid::alt_mine(int x, int y) {
         }
     }
     gen_mines(1);
-    empty_blocks.push_back(make_pair(x, y));
+    empty_blocks.push_back(std::make_pair(x, y));
 }
-
 
 // @return true if player wins
 bool Grid::check_win() {
     return click_count == BLOCKS - MAX_MINES;
 }
-
 
 /*
 * @param axis int x, int y
@@ -176,9 +151,8 @@ char Grid::get_user_pos(int x, int y) {
     return user_map[x][y];
 }
 
-
 // dfs algorithm
-void Grid::click_dfs(int x, int y, vector<CellInfo>& cells) {
+void Grid::click_dfs(int x, int y, std::vector<Cell>& cells) {
     if (!valid_pos(x, y) || user_map[x][y] != UNREV) {
         return;
     }
@@ -200,9 +174,8 @@ void Grid::click_dfs(int x, int y, vector<CellInfo>& cells) {
     return;
 }
 
-
 // click a position
-void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
+void Grid::click_pos(int x, int y, std::vector<Cell> &cells) {
     if (!valid_pos(x, y)) {
         return;
     }
@@ -235,7 +208,6 @@ void Grid::click_pos(int x, int y, vector<CellInfo> &cells) {
     }
 }
 
-
 // @return true: set flag | false: cancel flag
 bool Grid::flag_mine(int x, int y) {
     if (user_map[x][y] == FLAG) {
@@ -248,9 +220,8 @@ bool Grid::flag_mine(int x, int y) {
     }
 }
 
-
 // check wrongly flagged position
-void Grid::check_wrong_flag(std::vector<CellInfo>& cells) {
+void Grid::check_wrong_flag(std::vector<Cell>& cells) {
     for (int i = 0; i < sys_map.size(); ++i) {
         for (int j = 0; j < sys_map[0].size(); ++j) {
             if (sys_map[i][j] != MINE && user_map[i][j] == FLAG) {
@@ -260,9 +231,8 @@ void Grid::check_wrong_flag(std::vector<CellInfo>& cells) {
     }
 }
 
-
 // search a block (middle click)
-void Grid::search_pos(int x, int y, vector<CellInfo>& cells) {
+void Grid::search_pos(int x, int y, std::vector<Cell>& cells) {
     char flags = '0';
     if (user_map[x][y] == UNREV) {
         return;

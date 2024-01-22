@@ -1,14 +1,6 @@
-#include <graphics.h>
-#include <iostream>
-#include <conio.h>
-#include <vector>
 #include "minesweeper.h"
 #include "conf.h"
 #include "gui.h"
-
-
-using namespace std;
-
 
 // initialise gui
 Map::Map() {
@@ -20,7 +12,6 @@ Map::Map() {
 	display_map();
 }
 
-
 // initialise map
 void Map::init_map() {
 	for (int i = GAP; i < GRID_WIDTH * 16 + GAP; i += 16) {
@@ -30,7 +21,6 @@ void Map::init_map() {
 	}
 	set_face_smile();
 }
-
 
 // display map on screen
 void Map::display_map() {
@@ -47,7 +37,6 @@ void Map::display_map() {
 	putimage(FACE_X, FACE_Y, &face_smile);
 }
 
-
 void Map::init_counters() {
 	for (int i = 0; i <= 2; i++) {
 		putimage(COUNTER_RX + DIGIT_WIDTH * i, COUNTER_RY, &digit_0);
@@ -55,10 +44,9 @@ void Map::init_counters() {
 	set_lcounter(MAX_MINES);
 }
 
-
 // set mine counter
 void Map::set_lcounter(int mines) {
-	vector<int> digits;
+	std::vector<int> digits;
 	if (mines > 999) mines = 999;
 	if (mines < 0) mines = 0;
 	while (mines) {
@@ -74,10 +62,9 @@ void Map::set_lcounter(int mines) {
 	}
 }
 
-
 // set time counter
 void Map::set_rcounter(int time) {
-	vector<int> digits;
+	std::vector<int> digits;
 	if (time > 999) time = 999;
 	if (time < 0) time = 0;
 	while (time) {
@@ -92,7 +79,6 @@ void Map::set_rcounter(int time) {
 		set_digit(COUNTER_RX + DIGIT_WIDTH * i, COUNTER_LY, digits[i]);
 	}
 }
-
 
 // set digit given axis
 void Map::set_digit(int x, int y, int digit) {
@@ -110,59 +96,54 @@ void Map::set_digit(int x, int y, int digit) {
 	}
 }
 
-
 void Map::set_face_smile() {
 	putimage(FACE_X, FACE_Y, &face_smile);
 }
-
 
 void Map::set_face_dead() {
 	putimage(FACE_X, FACE_Y, &face_dead);
 }
 
-
 void Map::set_face_cool() {
 	putimage(FACE_X, FACE_Y, &face_cool);
 }
 
-
 // load assets from folder
 void Map::load_assets() {
-	loadimage(&unrev, _T("./assets/unrev.png"));
-	loadimage(&blank, _T("./assets/blank.png"));
-	loadimage(&flag, _T("./assets/flag.png"));
-	loadimage(&flag_wrong, _T("./assets/flag_wrong.png"));
-	loadimage(&mine, _T("./assets/mine.png"));
-	loadimage(&mine_click, _T("./assets/mine_click.png"));
-	loadimage(&qmark, _T("./assets/qmark.png"));
-	loadimage(&qmark_click, _T("./assets/qmark_click.png"));
-	loadimage(&face_cool, _T("./assets/face_cool.png"));
-	loadimage(&face_dead, _T("./assets/face_dead.png"));
-	loadimage(&face_shock, _T("./assets/shock.png"));
-	loadimage(&face_smile, _T("./assets/face_smile.png"));
-	loadimage(&face_smile_press, _T("./assets/face_smile_press.png"));
-	loadimage(&num_1, _T("./assets/num_1.png"));
-	loadimage(&num_2, _T("./assets/num_2.png"));
-	loadimage(&num_3, _T("./assets/num_3.png"));
-	loadimage(&num_4, _T("./assets/num_4.png"));
-	loadimage(&num_5, _T("./assets/num_5.png"));
-	loadimage(&num_6, _T("./assets/num_6.png"));
-	loadimage(&num_7, _T("./assets/num_7.png"));
-	loadimage(&num_8, _T("./assets/num_8.png"));
-	loadimage(&digit_0, _T("./assets/digit_0.png"));
-	loadimage(&digit_1, _T("./assets/digit_1.png"));
-	loadimage(&digit_2, _T("./assets/digit_2.png"));
-	loadimage(&digit_3, _T("./assets/digit_3.png"));
-	loadimage(&digit_4, _T("./assets/digit_4.png"));
-	loadimage(&digit_5, _T("./assets/digit_5.png"));
-	loadimage(&digit_6, _T("./assets/digit_6.png"));
-	loadimage(&digit_7, _T("./assets/digit_7.png"));
-	loadimage(&digit_8, _T("./assets/digit_8.png"));
-	loadimage(&digit_9, _T("./assets/digit_9.png"));
-	loadimage(&digit_null, _T("./assets/digit_null.png"));
-	loadimage(&digit_empty, _T("./assets/digit_empty.png"));
+	loadimage(&unrev, _T("assets/unrev.png"));
+	loadimage(&blank, _T("assets/blank.png"));
+	loadimage(&flag, _T("assets/flag.png"));
+	loadimage(&flag_wrong, _T("assets/flag_wrong.png"));
+	loadimage(&mine, _T("assets/mine.png"));
+	loadimage(&mine_click, _T("assets/mine_click.png"));
+	loadimage(&qmark, _T("assets/qmark.png"));
+	loadimage(&qmark_click, _T("assets/qmark_click.png"));
+	loadimage(&face_cool, _T("assets/face_cool.png"));
+	loadimage(&face_dead, _T("assets/face_dead.png"));
+	loadimage(&face_shock, _T("assets/shock.png"));
+	loadimage(&face_smile, _T("assets/face_smile.png"));
+	loadimage(&face_smile_press, _T("assets/face_smile_press.png"));
+	loadimage(&num_1, _T("assets/num_1.png"));
+	loadimage(&num_2, _T("assets/num_2.png"));
+	loadimage(&num_3, _T("assets/num_3.png"));
+	loadimage(&num_4, _T("assets/num_4.png"));
+	loadimage(&num_5, _T("assets/num_5.png"));
+	loadimage(&num_6, _T("assets/num_6.png"));
+	loadimage(&num_7, _T("assets/num_7.png"));
+	loadimage(&num_8, _T("assets/num_8.png"));
+	loadimage(&digit_0, _T("assets/digit_0.png"));
+	loadimage(&digit_1, _T("assets/digit_1.png"));
+	loadimage(&digit_2, _T("assets/digit_2.png"));
+	loadimage(&digit_3, _T("assets/digit_3.png"));
+	loadimage(&digit_4, _T("assets/digit_4.png"));
+	loadimage(&digit_5, _T("assets/digit_5.png"));
+	loadimage(&digit_6, _T("assets/digit_6.png"));
+	loadimage(&digit_7, _T("assets/digit_7.png"));
+	loadimage(&digit_8, _T("assets/digit_8.png"));
+	loadimage(&digit_9, _T("assets/digit_9.png"));
+	loadimage(&digit_null, _T("assets/digit_null.png"));
+	loadimage(&digit_empty, _T("assets/digit_empty.png"));
 }
-
 
 /*
 * CellInfo.sym : KEYBOARD 'ESC' -> exit
@@ -171,7 +152,7 @@ void Map::load_assets() {
 * CellInfo.sym : RIGHTCLICK -> flag
 * CellInfo.sym : MIDDLECLICK -> search
 */
-CellInfo Map::game_loop() {
+Cell Map::game_loop() {
 	ExMessage m;
 	while (true) {
 		m = getmessage(EX_MOUSE | EX_KEY);
@@ -190,7 +171,6 @@ CellInfo Map::game_loop() {
 		}
 	}
 }
-
 
 // update a block given axis
 void Map::upd_block(int x, int y, char sym) {
@@ -211,7 +191,6 @@ void Map::upd_block(int x, int y, char sym) {
 	case '8': putimage(x, y, &num_8); break;
 	}
 }
-
 
 // exit gui
 void Map::exit_gui() {

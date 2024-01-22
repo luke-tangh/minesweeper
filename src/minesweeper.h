@@ -1,17 +1,20 @@
 ﻿#pragma once
-#include <vector>
-#include <map>
 
+#include <algorithm>
+#include <iostream>
+#include <cstdlib>
+#include <iomanip>
+#include <vector>
+#include <random>
+#include <ctime>
 
 bool valid_pos(int x, int y);
 
-
-struct CellInfo {
+struct Cell {
 	int x;
 	int y;
 	char sym;
 };
-
 
 // base class for user_map and sys_map
 class Grid {
@@ -37,8 +40,8 @@ public:
 	bool is_mine(int x, int y);
 	bool flag_mine(int x, int y);
 	void alt_mine(int x, int y);
-	void check_wrong_flag(std::vector<CellInfo>& cells);
-	void click_dfs(int x, int y, std::vector<CellInfo> &cells);
-	void click_pos(int x, int y, std::vector<CellInfo> &cells);
-	void search_pos(int x, int y, std::vector<CellInfo> &cells);
+	void check_wrong_flag(std::vector<Cell>& cells);
+	void click_dfs(int x, int y, std::vector<Cell> &cells);
+	void click_pos(int x, int y, std::vector<Cell> &cells);
+	void search_pos(int x, int y, std::vector<Cell> &cells);
 };

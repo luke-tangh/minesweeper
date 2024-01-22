@@ -6,34 +6,26 @@
 #include "conf.h"
 #include "gui.h"
 
-
-using namespace std;
-
-
 /* global variables */
 bool game_over = false;
 bool refresh_timer = false;
 
-
-static unique_ptr<Map> pM(new Map);
-static unique_ptr<Grid> pG(new Grid);
+static std::unique_ptr<Map> pM(new Map);
+static std::unique_ptr<Grid> pG(new Grid);
 static bool game_exit = false;  // `esc` is pressed
 static int flag_count = 0;
 static int t_start = 0;
 static int t_end = 0;
-
 
 // if axis lands in the grind
 bool valid_axis(int x, int y) {
 	return (x > GAP && x < GAP + GRID_WIDTH * 16 && y > HEAD && y < GRID_HEIGHT * 16 + HEAD);
 }
 
-
 // if restart botton is clicked
 bool click_restart(int x, int y) {
 	return x > FACE_X && x < FACE_X + FACE && y > FACE_Y && y < FACE_Y + FACE;
 }
-
 
 // restart game
 void restart(int x, int y) {
@@ -45,7 +37,6 @@ void restart(int x, int y) {
 	pM->init_counters();
 }
 
-
 // left click a block
 void click_block(int x, int y) {
 	if (click_restart(x, y)) restart(x, y);
@@ -53,16 +44,15 @@ void click_block(int x, int y) {
 		if (!valid_axis(x, y) || game_over) return;
 		int x_idx = (y - HEAD) / BLOCK;
 		int y_idx = (x - GAP) / BLOCK;
-		vector<CellInfo> cells = {};
+		std::vector<Cell> cells = {};
 		pG->click_pos(x_idx, y_idx, cells);
-		for (CellInfo ci : cells) {
+		for (Cell ci : cells) {
 			int x_pic = ci.y * BLOCK + GAP;
 			int y_pic = ci.x * BLOCK + HEAD;
 			pM->upd_block(x_pic, y_pic, ci.sym);
 		}
 	}
 }
-
 
 // right click a block
 void flag_block(int x, int y) {
@@ -87,21 +77,19 @@ void flag_block(int x, int y) {
 	pM->set_lcounter(MAX_MINES - flag_count);
 }
 
-
 // middle click a block
 void search_block(int x, int y) {
 	if (!valid_axis(x, y) || game_over) return;
 	int x_idx = (y - HEAD) / BLOCK;
 	int y_idx = (x - GAP) / BLOCK;
-	vector<CellInfo> cells = {};
+	std::vector<Cell> cells = {};
 	pG->search_pos(x_idx, y_idx, cells);
-	for (CellInfo ci : cells) {
+	for (Cell ci : cells) {
 		int x_pic = ci.y * BLOCK + GAP;
 		int y_pic = ci.x * BLOCK + HEAD;
 		pM->upd_block(x_pic, y_pic, ci.sym);
 	}
 }
-
 
 // start timer if game starts
 void check_timer() {
@@ -110,7 +98,6 @@ void check_timer() {
 		t_start = time(NULL);
 	}
 }
-
 
 // update time LCD
 void upd_time() {
@@ -123,11 +110,10 @@ void upd_time() {
 	}
 }
 
-
 int main() {
-	thread timer;
+	std::thread timer;
 	t_start = time(NULL);
-	timer = thread(upd_time);
+	timer = std::thread(upd_time);
 	
 	pG->init_game();
 	pM->init_counters();
@@ -141,7 +127,7 @@ int main() {
 		search_block  // 3 - `MIDDLECLICK`
 	};
 
-	CellInfo axis = pM->game_loop();
+	Cell axis = pM->game_loop();
 
 	// game loop
 	while (axis.sym != KEY_ESC) {

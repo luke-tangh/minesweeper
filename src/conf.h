@@ -1,6 +1,5 @@
 #pragma once
 
-
 /* game control */
 enum Input {
     KEY_ESC = -1,
@@ -10,18 +9,15 @@ enum Input {
     MOUSE_MIDDLE = 3
 };
 
-
 /* global variables */
 extern bool game_over;
 extern bool refresh_timer;
-
 
 /* map settings chars */
 constexpr int GRID_HEIGHT = 16;  // 16
 constexpr int GRID_WIDTH = 30;  // 30
 constexpr int MAX_MINES = 99;  // 99
 constexpr int BLOCKS = GRID_HEIGHT * GRID_WIDTH;
-
 
 /* map chars */
 constexpr char MINE = 'M';
@@ -30,7 +26,6 @@ constexpr char BLANK = '0';  // `0`: no adjacent mines
 constexpr char UNREV = '.';
 constexpr char FLAG = 'F';
 constexpr char FLAG_WRONG = 'W';
-
 
 /* gui settings */
 constexpr int GAP = 10;

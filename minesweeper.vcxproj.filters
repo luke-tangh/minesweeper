@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\conf.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\gui.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\minesweeper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\gui.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\minesweeper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\blank.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_0.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_1.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_2.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_3.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_4.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_5.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_6.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_7.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_8.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_9.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_empty.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digit_null.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\digits.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\empty.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\face_cool.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\face_dead.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\face_shock.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\face_smile.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\face_smile_press.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\flag.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\flag_wrong.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\icon_16x16.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\icon_32x32.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\mine.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\mine_click.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_1.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_2.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_3.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_4.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_5.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_6.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_7.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\num_8.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\qmark.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\qmark_click.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="assets\unrev.png">
+      <Filter>资源文件</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

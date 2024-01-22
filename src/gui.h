@@ -1,7 +1,9 @@
 #pragma once
-#include <graphics.h>
-#include <vector>
 
+#include <graphics.h>
+#include <iostream>
+#include <conio.h>
+#include <vector>
 
 class Map {
 private:
@@ -30,7 +32,7 @@ public:
 	void set_face_dead();
 	void set_face_cool();
 	void load_assets();
-	CellInfo game_loop();
+	Cell game_loop();
 	void upd_block(int x, int y, char sym);
 	void exit_gui();
 };
